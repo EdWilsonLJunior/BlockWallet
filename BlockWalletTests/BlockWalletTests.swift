@@ -1,10 +1,3 @@
-//
-//  BlockWalletTests.swift
-//  BlockWalletTests
-//
-//  Created by Junior, Ed Wilson Luciano on 27/05/26.
-//
-
 import Testing
 @testable import BlockWallet
 

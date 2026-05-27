@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  BlockWallet
-//
-//  Created by Junior, Ed Wilson Luciano on 27/05/26.
-//
-
 import SwiftUI
 
 struct ContentView: View {
