@@ -5,57 +5,59 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var enableBiometric: Bool = true
+    @State private var goToDashboard: Bool = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            
-            // Header
-            HStack(alignment: .center) {
-                Text("Login")
+        NavigationStack {
+            VStack(alignment: .leading, spacing: 24) {
+
+                // Header
+                HStack {
+                    Text("Login")
+                        .foregroundColor(.white)
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                }
+                
+                Spacer().frame(height: 10)
+                
+                Text("Bem vindo")
+                    .font(.title)
+                    .bold()
                     .foregroundColor(.white)
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
+                
+                Text("Informe seus dados para continuar")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+                
+                Spacer().frame(height: 10)
+                
+                EmailField(email: $email)
+                
+                PasswordField(
+                    title: "Senha",
+                    placeholder: "Insira sua senha",
+                    text: $password
+                )
+                
+                BiometricToggleCard(isEnabled: $enableBiometric)
+                
+                Spacer()
+                
+                PrimaryButton(title: "Login") {
+                    goToDashboard = true
+                }
+
             }
-            
-            Spacer().frame(height: 10)
-            
-            // Title
-            Text("Bem vindo")
-                .font(.title)
-                .bold()
-                .foregroundColor(.white)
-            
-            Text("Informe seus dados para continuar")
-                .font(.subheadline)
-                .foregroundColor(.gray)
-            
-            Spacer().frame(height: 10)
-            
-            // Email Field
-            EmailField(email: $email)
-            
-            // Password Field (reutilizado)
-            PasswordField(
-                title: "Senha",
-                placeholder: "Insira sua senha",
-                text: $password
-            )
-            
-            // Biometric toggle
-            BiometricToggleCard(isEnabled: $enableBiometric)
-            
-            Spacer()
-            
-            // Login Button
-            PrimaryButton(title: "Login") {
-                print("Login clicado")
+            .padding()
+            .background(Color.black.ignoresSafeArea())
+            .navigationDestination(isPresented: $goToDashboard) {
+                DashboardView()
+                    .navigationTitle("Dashboard")
             }
         }
-        .padding()
-        .background(Color.black.ignoresSafeArea())
     }
 }
-
 
 #Preview {
     LoginView()
