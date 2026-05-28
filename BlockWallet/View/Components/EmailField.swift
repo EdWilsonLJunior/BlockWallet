@@ -10,7 +10,7 @@ struct EmailField: View {
                 .foregroundColor(.white)
                 .font(.subheadline)
             
-            TextField("Enter your email", text: $email)
+            TextField("Inform seu e-mail", text: $email)
                 .keyboardType(.emailAddress)
                 .autocapitalization(.none)
                 .foregroundColor(.white)
