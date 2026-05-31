@@ -9,32 +9,33 @@ import SwiftUI
 
 struct BottomBarView: View {
     var body: some View {
-        ZStack {
-            
-            HStack {
-                BottomItem(icon: "house", title: "Home", isActive: true)
-                BottomItem(icon: "chart.bar", title: "Market")
+        NavigationStack {
+            ZStack {
+                HStack {
+                    BottomItem(icon: "house", title: "Home", isActive: true)
+                    BottomItem(icon: "chart.bar", title: "Market")
+                    
+                    Spacer()
+                        .frame(width: 60)
+                    
+                    BottomItem(icon: "wallet.pass", title: "Assets")
+                    BottomItem(icon: "line.3.horizontal", title: "Menu")
+                }
+                .padding()
+                .background(Color.white.opacity(0.05))
+                .clipShape(RoundedRectangle(cornerRadius: 30))
                 
-                Spacer()
-                    .frame(width: 60)
-                
-                BottomItem(icon: "wallet.pass", title: "Assets")
-                BottomItem(icon: "line.3.horizontal", title: "Menu")
+                Button(action: {}) {
+                    Circle()
+                        .fill(Color.blue)
+                        .frame(width: 60, height: 60)
+                        .overlay(
+                            Image(systemName: "arrow.up.arrow.down")
+                                .foregroundColor(.black)
+                        )
+                }
+                .offset(y: -25)
             }
-            .padding()
-            .background(Color.white.opacity(0.05))
-            .clipShape(RoundedRectangle(cornerRadius: 30))
-            
-            Button(action: {}) {
-                Circle()
-                    .fill(Color.blue)
-                    .frame(width: 60, height: 60)
-                    .overlay(
-                        Image(systemName: "arrow.up.arrow.down")
-                            .foregroundColor(.black)
-                    )
-            }
-            .offset(y: -25)
         }
     }
 }
