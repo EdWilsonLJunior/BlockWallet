@@ -1,10 +1,3 @@
-//
-//  TopMoversView.swift
-//  BlockWallet
-//
-//  Created by Junior, Ed Wilson Luciano on 28/05/26.
-//
-
 import SwiftUI
 
 struct TopMoversView: View {

@@ -1,10 +1,3 @@
-//
-//  BottomBarView.swift
-//  BlockWallet
-//
-//  Created by Junior, Ed Wilson Luciano on 28/05/26.
-//
-
 import SwiftUI
 
 struct BottomBarView: View {
@@ -12,20 +5,37 @@ struct BottomBarView: View {
         ZStack {
             
             HStack {
-                BottomItem(icon: "house", title: "Home", isActive: true)
-                BottomItem(icon: "chart.bar", title: "Market")
+                NavItem(icon: "house", title: "Home") {
+                    DashboardView()
+                }
                 
                 Spacer()
-                    .frame(width: 60)
+                    .frame(width: 40)
                 
-                BottomItem(icon: "wallet.pass", title: "Assets")
-                BottomItem(icon: "line.3.horizontal", title: "Menu")
+                NavItem(icon: "chart.bar", title: "Market") {
+                    DashboardView()
+                }
+                
+                Spacer()
+                    .frame(width: 80)
+                
+                NavItem(icon: "wallet.pass", title: "Assets") {
+                    DashboardView()
+                }
+                
+                Spacer()
+                    .frame(width: 40)
+                
+                NavItem(icon: "line.3.horizontal", title: "Menu") {
+                    MenuView()
+                }
             }
+            .frame(maxWidth: .infinity)
             .padding()
             .background(Color.white.opacity(0.05))
             .clipShape(RoundedRectangle(cornerRadius: 30))
             
-            Button(action: {}) {
+            NavigationLink(destination: DashboardView()) {
                 Circle()
                     .fill(Color.blue)
                     .frame(width: 60, height: 60)
@@ -35,23 +45,6 @@ struct BottomBarView: View {
                     )
             }
             .offset(y: -25)
-        }
-    }
-}
-
-struct BottomItem: View {
-    let icon: String
-    let title: String
-    var isActive: Bool = false
-    
-    var body: some View {
-        VStack(spacing: 4) {
-            Image(systemName: icon)
-                .foregroundColor(isActive ? .blue : .gray)
-            
-            Text(title)
-                .font(.caption2)
-                .foregroundColor(isActive ? .blue : .gray)
         }
         .frame(maxWidth: .infinity)
     }

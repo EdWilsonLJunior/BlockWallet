@@ -1,52 +1,57 @@
-//
-//  MenuView.swift
-//  BlockWallet
-//
-//  Created by Junior, Ed Wilson Luciano on 29/05/26.
-//
-
 import SwiftUI
 
 struct MenuView: View {
     
+    @State private var path: [MenuRoute] = []
+    
     var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
-            
-            VStack(spacing: 24) {
+        NavigationStack(path: $path) {
+            ZStack {
+                Color.black.ignoresSafeArea()
                 
-                // Title
-                Text("Menu")
-                    .font(.title2)
-                    .bold()
-                    .foregroundColor(.white)
-                
-                // Wallet Header
-                WalletHeaderView()
-                
-                // Menu Items
-                VStack(spacing: 20) {
-                    MenuItem(icon: "creditcard", title: "Add payment method")
-                    MenuItem(icon: "list.bullet", title: "Activity log")
-                    MenuItem(icon: "gearshape", title: "General")
-                    MenuItem(icon: "sun.max", title: "Preferences")
-                    MenuItem(icon: "key", title: "Security/ Privacy")
-                    MenuItem(icon: "bell", title: "Push notification")
-                    MenuItem(icon: "info.circle", title: "About")
-                    MenuItem(icon: "questionmark.circle", title: "Help")
+                VStack(spacing: 24) {
+                    
+                    Text("Menu")
+                        .font(.title2)
+                        .bold()
+                        .foregroundColor(.white)
+                    
+                    WalletHeaderView()
+                    
+                    VStack(spacing: 20) {
+                        
+                        MenuItem(icon: "creditcard", title: "Add payment method") {
+                            path.append(.payment)
+                        }
+                        
+                        MenuItem(icon: "list.bullet", title: "Activity log") {
+                            path.append(.activity)
+                        }
+                        
+                    }
+                    
+                    Divider()
+                        .background(Color.gray.opacity(0.4))
+                    
+                    MenuItem(icon: "arrow.backward.circle", title: "Log Out", isDestructive: true) {
+                        print("Logout tapped")
+                    }
+                    
+                    Spacer()
+                    
+                    BottomBarView()
                 }
-                
-                Divider()
-                    .background(Color.gray.opacity(0.4))
-                
-                // Logout
-                MenuItem(icon: "arrow.backward.circle", title: "Log Out", isDestructive: true)
-                
-                Spacer()
-                
-                BottomBarView() // reutilizado
+                .padding()
             }
-            .padding()
+            
+            .navigationDestination(for: MenuRoute.self) { route in
+                switch route {
+                case .payment:
+                    DashboardView()
+                case .activity:
+                    LoginView()
+                }
+            }
         }
     }
 }

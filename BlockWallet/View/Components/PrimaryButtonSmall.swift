@@ -1,10 +1,3 @@
-//
-//  PrimaryButtonSmall.swift
-//  BlockWallet
-//
-//  Created by Junior, Ed Wilson Luciano on 29/05/26.
-//
-
 import SwiftUI
 
 struct PrimaryButtonSmall: View {
@@ -22,7 +15,6 @@ struct PrimaryButtonSmall: View {
         }
     }
 }
-
 
 #Preview {
     PrimaryButtonSmall(title: "Tittle")
