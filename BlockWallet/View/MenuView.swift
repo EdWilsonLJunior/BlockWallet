@@ -1,11 +1,9 @@
 import SwiftUI
 
 struct MenuView: View {
-    
-    @State private var path: [MenuRoute] = []
-    
+        
     var body: some View {
-        NavigationStack(path: $path) {
+        NavigationStack {
             ZStack {
                 Color.black.ignoresSafeArea()
                 
@@ -19,38 +17,28 @@ struct MenuView: View {
                     WalletHeaderView()
                     
                     VStack(spacing: 20) {
-                        
-                        MenuItem(icon: "creditcard", title: "Add payment method") {
-                            path.append(.payment)
+                        NavigationLink {
+                            DashboardView()
+                        } label: {
+                            MenuItem(icon: "creditcard", title: "Add payment method") {}
                         }
-                        
-                        MenuItem(icon: "list.bullet", title: "Activity log") {
-                            path.append(.activity)
+                        NavigationLink(destination: LoginView()) {
+                            MenuItem(icon: "list.bullet", title: "Activity") {}
                         }
-                        
                     }
                     
                     Divider()
                         .background(Color.gray.opacity(0.4))
                     
-                    MenuItem(icon: "arrow.backward.circle", title: "Log Out", isDestructive: true) {
-                        print("Logout tapped")
+                    NavigationLink(destination: LoginView()) {
+                        MenuItem(icon: "arrow.backward.circle", title: "Log Out", isDestructive: true) {}
                     }
-                    
+                                        
                     Spacer()
                     
                     BottomBarView()
                 }
                 .padding()
-            }
-            
-            .navigationDestination(for: MenuRoute.self) { route in
-                switch route {
-                case .payment:
-                    DashboardView()
-                case .activity:
-                    LoginView()
-                }
             }
         }
     }

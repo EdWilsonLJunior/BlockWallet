@@ -55,6 +55,7 @@ struct LoginView: View {
             .padding()
             .background(Color.black.ignoresSafeArea())
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
