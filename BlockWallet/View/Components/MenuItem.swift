@@ -12,26 +12,20 @@ struct MenuItem: View {
     let icon: String
     let title: String
     var isDestructive: Bool = false
-    var action: () -> Void
     
     var body: some View {
-        Button(action: action) {
-            HStack {
-                Image(systemName: icon)
-                    .foregroundColor(.blue)
-                
-                Text(title)
-                    .foregroundColor(.white)
-                
-                Spacer()
-                
-                Image(systemName: "chevron.right")
-                    .foregroundColor(.blue)
-            }
+        HStack {
+            Image(systemName: icon)
+                .foregroundColor(isDestructive ? .red : .blue)
+            
+            Text(title)
+                .foregroundColor(.white)
+            
+            Spacer()
+            
+            Image(systemName: "chevron.right")
+                .foregroundColor(.blue)
         }
+        .padding(.vertical, 8)
     }
-}
-
-#Preview {
-    MenuItem(icon: "gear", title: "Settings", isDestructive: true, action: {})
 }
