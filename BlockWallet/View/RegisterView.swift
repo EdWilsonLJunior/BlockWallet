@@ -15,53 +15,71 @@ struct RegisterView: View {
     @State private var userName: String = ""
     @State private var textUserName: String = "Nome de usuário"
     @State private var textUserNamePlaceholder: String = "Nome de usuário"
+    @State private var showSucessModal: Bool = false
     
     var body: some View {
-        NavigationStack {
-            ScrollView{
-                VStack(alignment: .leading, spacing: 20) {
-                    Image("logo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: 250)
-                        .frame(maxWidth: .infinity)
-                    
-                    VStack(alignment: .leading) {
-                        Text("Crie sua conta agora")
-                            .font(.title)
-                            .bold()
-                            .foregroundColor(.white)
+        ZStack {
+            
+            
+            NavigationStack {
+                ScrollView{
+                    VStack(alignment: .leading, spacing: 20) {
+                        Image("logo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 250)
+                            .frame(maxWidth: .infinity)
                         
-                        Text("Informe seus dados e clique em registrar para continuar")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
+                        VStack(alignment: .leading) {
+                            Text("Crie sua conta agora")
+                                .font(.title)
+                                .bold()
+                                .foregroundColor(.white)
+                            
+                            Text("Informe seus dados e clique em registrar para continuar")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                        
+                        InputTextField(text: $textUserName, placeholder: $textUserNamePlaceholder, value: $userName)
+                        
+                        EmailField(email: $email)
+                        
+                        PasswordField(
+                            title: "Senha",
+                            placeholder: "Insira sua senha",
+                            text: $password
+                        )
+                        
+                        Spacer()
+                        
+                        PrimaryButton(title: "Registrar") {
+                            showSucessModal = true
+                            goToLogin = true
+                        }
+                        
+                    }
+                    .navigationDestination(isPresented: $goToLogin) {
+                        LoginView()
                     }
                     
-                    InputTextField(text: $textUserName, placeholder: $textUserNamePlaceholder, value: $userName)
-                    
-                    EmailField(email: $email)
-                    
-                    PasswordField(
-                        title: "Senha",
-                        placeholder: "Insira sua senha",
-                        text: $password
-                    )
-                    
-                    Spacer()
-                    
-                    PrimaryButton(title: "Registrar") {
-                        goToLogin = true
+                    if showSucessModal {
+                        SuccessModalView {
+                            showSucessModal = false
+                        }
                     }
-                    
                 }
-                .navigationDestination(isPresented: $goToLogin) {
-                    LoginView()
+                .padding()
+                .background(Color.black.ignoresSafeArea())
+            }
+            .navigationBarBackButtonHidden(true)
+            
+            if showSucessModal {
+                SuccessModalView {
+                    showSucessModal = false
                 }
             }
-            .padding()
-            .background(Color.black.ignoresSafeArea())
         }
-        .navigationBarBackButtonHidden(true)
     }
 }
 
