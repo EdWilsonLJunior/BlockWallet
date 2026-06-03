@@ -1,37 +1,43 @@
+//
+//  RegisterView.swift
+//  BlockWallet
+//
+//  Created by Junior, Ed Wilson Luciano on 03/06/26.
+//
+
 import SwiftUI
 
-struct LoginView: View {
-    
-    @Environment(\.modelContext) private var context
+struct RegisterView: View {
     
     @State private var email: String = ""
     @State private var password: String = ""
-    @State private var enableBiometric: Bool = true
-    @State private var goToDashboard: Bool = false
-    @State private var goToRegister: Bool = false
+    @State private var goToLogin: Bool = false
+    @State private var userName: String = ""
+    @State private var textUserName: String = "Nome de usuário"
+    @State private var textUserNamePlaceholder: String = "Nome de usuário"
     
     var body: some View {
         NavigationStack {
             ScrollView{
-                VStack (spacing: 20)
-                {
+                VStack(alignment: .leading, spacing: 20) {
                     Image("logo")
                         .resizable()
                         .scaledToFit()
-                        .frame(maxWidth: 250, maxHeight: 200)
-                }
-                VStack(alignment: .leading, spacing: 20) {
+                        .frame(maxWidth: 250)
+                        .frame(maxWidth: .infinity)
                     
                     VStack(alignment: .leading) {
-                        Text("Bem vindo")
+                        Text("Crie sua conta agora")
                             .font(.title)
                             .bold()
                             .foregroundColor(.white)
                         
-                        Text("Informe seus dados para continuar")
+                        Text("Informe seus dados e clique em registrar para continuar")
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
+                    
+                    InputTextField(text: $textUserName, placeholder: $textUserNamePlaceholder, value: $userName)
                     
                     EmailField(email: $email)
                     
@@ -41,27 +47,15 @@ struct LoginView: View {
                         text: $password
                     )
                     
-                    BiometricToggleCard(isEnabled: $enableBiometric)
-                    
                     Spacer()
                     
-                    PrimaryButton(title: "Entrar") {
-                        goToDashboard = true
-                    }
-                    
-                    Button {
-                        goToRegister = true
-                    } label: {
-                        Text("Registrar-se")
+                    PrimaryButton(title: "Registrar") {
+                        goToLogin = true
                     }
                     
                 }
-                .navigationDestination(isPresented: $goToDashboard) {
-                    DashboardView()
-                        .navigationTitle("Dashboard")
-                }
-                .navigationDestination(isPresented: $goToRegister) {
-                    RegisterView()
+                .navigationDestination(isPresented: $goToLogin) {
+                    LoginView()
                 }
             }
             .padding()
@@ -72,5 +66,5 @@ struct LoginView: View {
 }
 
 #Preview {
-    LoginView()
+    RegisterView()
 }

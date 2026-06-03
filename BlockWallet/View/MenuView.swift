@@ -1,7 +1,13 @@
 import SwiftUI
 
 struct MenuView: View {
-        
+    
+    @State private var email: String = ""
+    @State private var password: String = ""
+    @State private var enableBiometric: Bool = true
+    @State private var goToDashboard: Bool = false
+    @State private var goToRegister: Bool = false
+    
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
