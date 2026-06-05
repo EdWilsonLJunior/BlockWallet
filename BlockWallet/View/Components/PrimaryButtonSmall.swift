@@ -7,7 +7,7 @@ struct PrimaryButtonSmall: View {
         Button(action: {}) {
             Text(title)
                 .font(.subheadline)
-                .foregroundColor(.black)
+                .foregroundColor(.white)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 8)
                 .background(Color.blue)

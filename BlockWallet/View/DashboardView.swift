@@ -2,6 +2,9 @@ import SwiftUI
 
 struct DashboardView: View {
     
+    @State private var titleMovers: String = "Dashboard"
+    @State private var textButtonMovers: String = "Ver Todos"
+    
     var body: some View {
         
         ZStack {
@@ -17,11 +20,11 @@ struct DashboardView: View {
                 
                 BuyCryptoCard()
                 
-                TopMoversView()
+                TopMoversView(title: $titleMovers, textButton: $textButtonMovers)
                 
                 Spacer()
                 
-                BottomBarView()
+                BottomBarView(currentView: .home)
             }
             .padding()
         }

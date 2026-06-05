@@ -10,26 +10,23 @@ struct AmountField: View {
     var body: some View {
         HStack {
             
-            TextField("0.0", text: $value)
+            TextField("Search Token", text: $value)
                 .foregroundColor(.white)
-                .font(.title3)
             
             Spacer()
             
-            Button {
-                onSelectCoin() // ✅ abre modal
-            } label: {
-                HStack(spacing: 6) {
-                    Image(systemName: icon)
-                        .foregroundColor(.orange)
-                    
-                    Text(coin)
-                        .foregroundColor(.white)
-                        .bold()
-                    
-                    Image(systemName: "chevron.down")
-                        .foregroundColor(.blue)
+            if coin != "" {
+                Button {
+                    onSelectCoin()
+                } label: {
+                    HStack {
+                        Image(systemName: icon)
+                        Text(coin)
+                    }
                 }
+            } else {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
             }
         }
         .padding()

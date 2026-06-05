@@ -3,7 +3,6 @@ import SwiftUI
 struct ActionsView: View {
     var body: some View {
         HStack(spacing: 40) {
-            
             ActionItem(icon: "arrow.up", title: "Enviar")
             ActionItem(icon: "arrow.down", title: "Receber")
             ActionItem(icon: "arrow.left.arrow.right", title: "Trocar")

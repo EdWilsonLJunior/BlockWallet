@@ -1,7 +1,7 @@
-enum TabBarItem {
-    case home
-    case market
-    case action
-    case assets
-    case menu
+enum TabBarItem: String {
+    case home = "home"
+    case market = "market"
+    case action = "action"
+    case assets = "assets"
+    case menu = "menu"
 }

@@ -23,11 +23,19 @@ struct MenuView: View {
                 
                 VStack(spacing: 20) {
                     NavigationLink(destination: DashboardView()) {
-                        MenuItem(icon: "creditcard", title: "Add payment method")
+                        MenuItem(icon: "house", title: "Home")
                     }
                     
-                    NavigationLink(destination: DashboardView()) { // Alterado para Dashboard ou uma View de Activity futura
-                        MenuItem(icon: "list.bullet", title: "Activity")
+                    NavigationLink(destination: MarketView(coins: mockCoins)) {
+                        MenuItem(icon: "chart.bar", title: "Market")
+                    }
+                    
+                    NavigationLink(destination: SwapView()) {
+                        MenuItem(icon: "arrow.up.arrow.down", title: "Swap")
+                    }
+                    
+                    NavigationLink(destination: AssetsView(coins: mockCoins)) {
+                        MenuItem(icon: "wallet.pass", title: "Assets")
                     }
                 }
                 
@@ -39,7 +47,7 @@ struct MenuView: View {
                                     
                 Spacer()
                 
-                BottomBarView()
+                BottomBarView(currentView: .menu)
             }
             .padding()
         }

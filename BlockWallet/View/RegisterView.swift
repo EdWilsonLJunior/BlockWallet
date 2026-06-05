@@ -19,8 +19,6 @@ struct RegisterView: View {
     
     var body: some View {
         ZStack {
-            
-            
             NavigationStack {
                 ScrollView{
                     VStack(alignment: .leading, spacing: 20) {
@@ -55,19 +53,10 @@ struct RegisterView: View {
                         
                         PrimaryButton(title: "Registrar") {
                             showSucessModal = true
-                            goToLogin = true
                         }
                         
                     }
-                    .navigationDestination(isPresented: $goToLogin) {
-                        LoginView()
-                    }
                     
-                    if showSucessModal {
-                        SuccessModalView {
-                            showSucessModal = false
-                        }
-                    }
                 }
                 .padding()
                 .background(Color.black.ignoresSafeArea())

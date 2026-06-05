@@ -1,10 +1,3 @@
-//
-//  InfoRow.swift
-//  BlockWallet
-//
-//  Created by Junior, Ed Wilson Luciano on 05/06/26.
-//
-
 import SwiftUI
 
 @ViewBuilder

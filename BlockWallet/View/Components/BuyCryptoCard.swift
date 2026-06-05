@@ -32,7 +32,7 @@ struct BuyCryptoCard: View {
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.blue)
-                        .foregroundColor(.black)
+                        .foregroundColor(.white)
                         .cornerRadius(25)
                 }
             }

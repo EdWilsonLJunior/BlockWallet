@@ -1,25 +1,49 @@
 import SwiftUI
 
 struct TopMoversView: View {
+    
+    @Binding var title: String
+    @Binding var textButton: String
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             
             HStack {
-                Text("Destaques")
+                Text(title)
                     .foregroundColor(.white)
                     .font(.headline)
                 
                 Spacer()
                 
-                Text("Ver todos")
+                Text(textButton)
                     .foregroundColor(.blue)
                     .font(.caption)
                     .padding()
             }
             
             HStack(spacing: 12) {
-                CoinCard(name: "BTC", subtitle: "Bitcoin", change: "+4.5%", color: .orange)
-                CoinCard(name: "ETH", subtitle: "Ethereum", change: "+4.5%", color: .purple)
+                
+                NavigationLink {
+                    DetailCoin()
+                } label: {
+                    CoinCard(
+                        name: "BTC",
+                        subtitle: "Bitcoin",
+                        change: "+4.5%",
+                        color: .orange
+                    )
+                }
+                
+                NavigationLink {
+                    DetailCoin()
+                } label: {
+                    CoinCard(
+                        name: "ETH",
+                        subtitle: "Ethereum",
+                        change: "+4.5%",
+                        color: .purple
+                    )
+                }
             }
         }
     }
@@ -64,5 +88,9 @@ struct CoinCard: View {
 }
 
 #Preview {
-    TopMoversView()
+    
+    @Previewable @State var title: String = "Destaques"
+    @Previewable @State var textButton: String = "Ver Todos"
+    
+    TopMoversView(title: $title, textButton: $textButton)
 }
