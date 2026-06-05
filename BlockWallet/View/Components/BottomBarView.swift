@@ -41,7 +41,7 @@ struct BottomBarView: View {
                     .frame(width: 60, height: 60)
                     .overlay(
                         Image(systemName: "arrow.up.arrow.down")
-                            .foregroundColor(.black)
+                            .foregroundColor(.white)
                     )
             }
             .offset(y: -25)

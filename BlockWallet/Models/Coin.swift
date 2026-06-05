@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class CryptoCoin {
+class CryptoCoin: Identifiable {
     var id: String
     var name: String
     var symbol: String

@@ -24,9 +24,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		F3EEA8402FC70315008E8073 /* BlockWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlockWallet.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F3EEA84D2FC70316008E8073 /* BlockWalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlockWalletTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F3EEA8572FC70316008E8073 /* BlockWalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlockWalletUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3EEA8402FC70315008E8073 /* BlockWallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = BlockWallet.app; path = "/Users/ejunior1/Developer/mac/BlockWallet/build/Debug-iphoneos/BlockWallet.app"; sourceTree = "<absolute>"; };
+		F3EEA84D2FC70316008E8073 /* BlockWalletTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = BlockWalletTests.xctest; path = "/Users/ejunior1/Developer/mac/BlockWallet/build/Debug-iphoneos/BlockWallet.app/PlugIns/BlockWalletTests.xctest"; sourceTree = "<absolute>"; };
+		F3EEA8572FC70316008E8073 /* BlockWalletUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = BlockWalletUITests.xctest; path = "/Users/ejunior1/Developer/mac/BlockWallet/build/Debug-iphoneos/BlockWalletUITests-Runner.app/PlugIns/BlockWalletUITests.xctest"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -78,18 +78,7 @@
 				F3EEA8422FC70315008E8073 /* BlockWallet */,
 				F3EEA8502FC70316008E8073 /* BlockWalletTests */,
 				F3EEA85A2FC70316008E8073 /* BlockWalletUITests */,
-				F3EEA8412FC70315008E8073 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		F3EEA8412FC70315008E8073 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				F3EEA8402FC70315008E8073 /* BlockWallet.app */,
-				F3EEA84D2FC70316008E8073 /* BlockWalletTests.xctest */,
-				F3EEA8572FC70316008E8073 /* BlockWalletUITests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,7 +185,7 @@
 			mainGroup = F3EEA8372FC70315008E8073;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = F3EEA8412FC70315008E8073 /* Products */;
+			productRefGroup = F3EEA8372FC70315008E8073;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
