@@ -1,13 +1,28 @@
 import SwiftUI
 
+enum AlertType {
+    case success
+    case error
+}
+
 struct SuccessModalView: View {
     
-    var title: String = "Sucesso"
-    var message: String = "Operação realizada com sucesso!"
-    var buttonTitle: String = "Finalizar"
+    var title: String = ""
+    var message: String = ""
+    var buttonTitle: String = ""
     var onClose: () -> Void
     
     @State private var goToLogin: Bool = false
+    var alertType: AlertType
+    
+    init(title: String = "Sucesso", message: String = "Operação realizada com sucesso!", buttonTitle: String = "Finalizar", alertType: AlertType = .success, onClose: @escaping () -> Void) {
+        self.title = title
+        self.message = message
+        self.buttonTitle = buttonTitle
+        self.onClose = onClose
+        
+        self.alertType = alertType
+    }
     
     var body: some View {
         NavigationStack {
@@ -33,11 +48,11 @@ struct SuccessModalView: View {
                     
                     ZStack {
                         Circle()
-                            .stroke(Color.blue, lineWidth: 2)
+                            .stroke(alertType == .error ? Color.red: Color.blue , lineWidth: 2)
                             .frame(width: 80, height: 80)
                         
-                        Image(systemName: "checkmark")
-                            .foregroundColor(.blue)
+                        Image(systemName: alertType == .success ? "checkmark" : "xmark")
+                            .foregroundColor( alertType == .error ? .red : .blue)
                             .font(.title)
                     }
                     .padding(.vertical, 10)
@@ -52,7 +67,7 @@ struct SuccessModalView: View {
                         goToLogin = true
                     } label: {
                         Text(buttonTitle)
-                            .foregroundColor(.black)
+                            .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.blue)

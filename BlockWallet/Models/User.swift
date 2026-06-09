@@ -8,13 +8,9 @@
 import Foundation
 import SwiftData
 
-@Model
-class User {
-    var name: String
+struct User: Codable {
+    var id: String?
+    var displayName: String
+    var password: String
     var email: String
-    
-    init(name: String, email: String) {
-        self.name = name
-        self.email = email
-    }
 }

@@ -15,7 +15,7 @@ struct InputTextField: View {
             TextField(placeholder, text: $value)
                 .keyboardType(.emailAddress)
                 .autocapitalization(.none)
-                .foregroundColor(.white)
+                .foregroundColor(.black)
                 .padding()
                 .background(Color(white: 0.85))
                 .cornerRadius(12)

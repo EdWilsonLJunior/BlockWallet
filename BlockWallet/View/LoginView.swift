@@ -9,6 +9,7 @@ struct LoginView: View {
     @State private var enableBiometric: Bool = true
     @State private var goToDashboard: Bool = false
     @State private var goToRegister: Bool = false
+    @State private var isEmailInvalid: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -33,7 +34,7 @@ struct LoginView: View {
                             .foregroundColor(.gray)
                     }
                     
-                    EmailField(email: $email)
+                    EmailField(email: $email, isInvalid: $isEmailInvalid)
                     
                     PasswordField(
                         title: "Senha",
@@ -54,6 +55,7 @@ struct LoginView: View {
                     } label: {
                         Text("Registrar-se")
                     }
+                    .frame(maxWidth: .infinity, alignment: .center)
                     
                 }
                 .navigationDestination(isPresented: $goToDashboard) {
