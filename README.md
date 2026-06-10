@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="BlockWallet/Resources/Assets.xcassets/logo.imageset/Contents.json" alt="BlockWallet Logo" width="120"/>
   <h1>BlockWallet</h1>
   <p>Carteira de criptomoedas para iOS, construída com SwiftUI.</p>
 
