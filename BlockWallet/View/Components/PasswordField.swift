@@ -16,10 +16,10 @@ struct PasswordField: View {
             HStack {
                 if isSecure {
                     SecureField(placeholder, text: $text)
-                        .foregroundColor(.white)
+                        .foregroundColor(.black)
                 } else {
                     TextField(placeholder, text: $text)
-                        .foregroundColor(.white)
+                        .foregroundColor(.black)
                 }
                 
                 Button(action: {

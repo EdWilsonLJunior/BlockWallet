@@ -34,7 +34,7 @@ struct WalletHeaderView: View {
             Spacer()
             
             // reutilizando PrimaryButton (adaptado)
-            PrimaryButtonSmall(title: "Edit")
+            PrimaryButtonSmall(title: "Editar")
         }
     }
 }

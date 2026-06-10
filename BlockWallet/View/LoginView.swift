@@ -8,16 +8,20 @@ struct LoginView: View {
     @State private var password: String = ""
     @State private var enableBiometric: Bool = true
     @State private var goToDashboard: Bool = false
+    @State private var goToRegister: Bool = false
+    @State private var isEmailInvalid: Bool = false
     
     var body: some View {
         NavigationStack {
             ScrollView{
-                VStack(alignment: .leading, spacing: 20) {
+                VStack (spacing: 20)
+                {
                     Image("logo")
                         .resizable()
                         .scaledToFit()
-                        .frame(maxWidth: 250)
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: 250, maxHeight: 200)
+                }
+                VStack(alignment: .leading, spacing: 20) {
                     
                     VStack(alignment: .leading) {
                         Text("Bem vindo")
@@ -30,7 +34,7 @@ struct LoginView: View {
                             .foregroundColor(.gray)
                     }
                     
-                    EmailField(email: $email)
+                    EmailField(email: $email, isInvalid: $isEmailInvalid)
                     
                     PasswordField(
                         title: "Senha",
@@ -45,11 +49,21 @@ struct LoginView: View {
                     PrimaryButton(title: "Entrar") {
                         goToDashboard = true
                     }
-
-                }               
+                    
+                    Button {
+                        goToRegister = true
+                    } label: {
+                        Text("Registrar-se")
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    
+                }
                 .navigationDestination(isPresented: $goToDashboard) {
                     DashboardView()
                         .navigationTitle("Dashboard")
+                }
+                .navigationDestination(isPresented: $goToRegister) {
+                    RegisterView()
                 }
             }
             .padding()
