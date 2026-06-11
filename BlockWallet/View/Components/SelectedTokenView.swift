@@ -24,13 +24,13 @@ struct SelectTokenView: View {
                 .frame(width: 40, height: 4)
                 .padding(.top, 8)
             
-            Text("Select Token")
+            Text("Selecione a moeda")
                 .foregroundColor(.white)
                 .font(.headline)
             
             // Search
             HStack {
-                TextField("Search token", text: $search)
+                TextField("Procurar moeda", text: $search)
                     .foregroundColor(.white)
                 
                 Image(systemName: "magnifyingglass")

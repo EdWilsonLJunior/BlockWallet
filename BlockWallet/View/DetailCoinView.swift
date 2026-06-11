@@ -7,18 +7,9 @@ struct DetailCoin: View {
             
             // MARK: HEADER
             HStack {
-                Image(systemName: "arrow.left")
-                    .foregroundColor(.white)
-                
-                Spacer()
-                
                 Text("BTC")
                     .foregroundColor(.white)
                     .font(.headline)
-                
-                Spacer()
-                
-                Spacer().frame(width: 20) // alinhamento
             }
             .padding(.horizontal)
             
