@@ -51,7 +51,7 @@ struct DetailCoin: View {
                 timeButton("15m")
                 timeButton("1h")
                 timeButton("1d")
-                timeButton("More")
+                timeButton("Mais")
             }
             
             Divider().background(Color.gray.opacity(0.3))
@@ -104,19 +104,18 @@ struct DetailCoin: View {
             
             // MARK: INFO
             VStack(spacing: 12) {
-                
-                infoRow(title: "Market Cap", value: "$250M")
-                infoRow(title: "Circulating Supply", value:"$10M")
-                infoRow(title: "Max Supply", value:"5M")
-                infoRow(title: "Total Supply", value:"9M")
-                infoRow(title: "All Time High", value:"$40")
-                infoRow(title: "All Time Low", value:"$4")
+                infoRow(title: "Capitalização de Mercado", value: "$250M")
+                infoRow(title: "Oferta Circulante", value:"$10M")
+                infoRow(title: "Oferta Máxima", value:"5M")
+                infoRow(title: "Oferta Total", value:"9M")
+                infoRow(title: "Máxima Histórica", value:"$40")
+                infoRow(title: "Mínima Histórica", value:"$4")
             }
                         
             Spacer()
             
             // MARK: BUTTON
-            PrimaryButton(title: "Trade") {
+            PrimaryButton(title: "Comprar") {
                 print("Trade clicked")
             }
         }

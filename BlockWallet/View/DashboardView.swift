@@ -2,7 +2,7 @@ import SwiftUI
 
 struct DashboardView: View {
     
-    @State private var titleMovers: String = "Dashboard"
+    @State private var titleMovers: String = "Maiores Movimentações"
     @State private var textButtonMovers: String = "Ver Todos"
     
     var body: some View {
