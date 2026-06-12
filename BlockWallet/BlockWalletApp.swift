@@ -3,10 +3,19 @@ import SwiftData
 
 @main
 struct BlockWalletApp: App {
+    @State private var session = SessionManager()
+
     var body: some Scene {
         WindowGroup {
-            LoginView()
-                //.modelContainer(for: User.self)
+            if session.isAuthenticated {
+                NavigationStack {
+                    DashboardView()
+                }
+                .environment(session)
+            } else {
+                LoginView()
+                    .environment(session)
+            }
         }
     }
 }

@@ -1,12 +1,7 @@
 import SwiftUI
 
 struct MenuView: View {
-    
-    @State private var email: String = ""
-    @State private var password: String = ""
-    @State private var enableBiometric: Bool = true
-    @State private var goToDashboard: Bool = false
-    @State private var goToRegister: Bool = false
+    @Environment(SessionManager.self) private var session
     
     var body: some View {
         ZStack {
@@ -41,8 +36,10 @@ struct MenuView: View {
                 
                 Divider()
                     .background(Color.gray.opacity(0.4))
-                    NavigationLink(destination: LoginView()) {
-                        MenuItem(icon: "arrow.backward.circle", title: "Log Out", isDestructive: true)
+                Button {
+                    session.logout()
+                } label: {
+                    MenuItem(icon: "arrow.backward.circle", title: "Log Out", isDestructive: true)
                 }
                                     
                 Spacer()
@@ -57,4 +54,5 @@ struct MenuView: View {
 
 #Preview {
     MenuView()
+        .environment(SessionManager())
 }
