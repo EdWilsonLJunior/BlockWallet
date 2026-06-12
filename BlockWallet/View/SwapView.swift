@@ -50,7 +50,7 @@ struct SwapView: View {
                 // YOU PAY
                 VStack(alignment: .leading, spacing: 8) {
                     
-                    Text("You Pay")
+                    Text("Você Paga")
                         .foregroundColor(.gray)
                         .font(.subheadline)
                     
@@ -62,7 +62,7 @@ struct SwapView: View {
                         showCoinSelector = true
                     }
                     
-                    Text("Balance: 100 BTC")
+                    Text("Quantidade: 100 BTC")
                         .foregroundColor(.gray)
                         .font(.caption)
                 }
@@ -81,7 +81,7 @@ struct SwapView: View {
                 // YOU RECEIVE
                 VStack(alignment: .leading, spacing: 8) {
                     
-                    Text("You Receive")
+                    Text("Você Recebe")
                         .foregroundColor(.gray)
                         .font(.subheadline)
                     
@@ -94,7 +94,7 @@ struct SwapView: View {
                         showCoinSelector = true
                     }
                     
-                    Text("Balance: 100 BTC")
+                    Text("Quantidade: 100 BTC")
                         .foregroundColor(.gray)
                         .font(.caption)
                 }

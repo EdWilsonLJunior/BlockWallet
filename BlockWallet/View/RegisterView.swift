@@ -31,12 +31,15 @@ struct RegisterView: View {
         ZStack {
             NavigationStack {
                 ScrollView{
-                    VStack(alignment: .leading, spacing: 20) {
-                        Image("logo")
+                    VStack (spacing: 20)
+                    {
+                        Image("logo")		
                             .resizable()
                             .scaledToFit()
-                            .frame(maxWidth: 250)
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: 250, maxHeight: 200)
+                    }
+                    VStack(alignment: .leading, spacing: 20) {
+   
                         
                         VStack(alignment: .leading) {
                             Text("Crie sua conta agora")
@@ -94,7 +97,6 @@ struct RegisterView: View {
                 .padding()
                 .background(Color.black.ignoresSafeArea())
             }
-            .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $toLogin) {
                 LoginView()
             }

@@ -6,7 +6,7 @@ struct MarketView: View {
     
     @State private var titleMovers: String = "Destaques"
     @State private var titleNewMovers: String = "Novos"
-    @State private var titleMoversAssets: String = "Maior Movimento"
+    @State private var titleMoversAssets: String = "Maiores Movimentações"
 
     @State private var textButtonMovers: String = "Ver Todos"
     
