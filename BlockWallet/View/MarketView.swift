@@ -2,6 +2,8 @@ import SwiftUI
 
 struct MarketView: View {
     
+    @StateObject private var viewModel: DashboardViewModel = DashboardViewModel()
+        
     var coins: [CryptoCoin]
     
     @State private var titleMovers: String = "Destaques"
@@ -23,12 +25,10 @@ struct MarketView: View {
                 
                 VStack(spacing: 24) {
                     
-                    TopMoversView(title: $titleMovers, textButton: $textButtonMovers)
-                    
-                    TopMoversView(title: $titleNewMovers, textButton: $textButtonMovers)
-
-                    TopMoversView(title: $titleMoversAssets, textButton: $textButtonMovers)
-
+                    TopMoversView(
+                        cryptoCard: viewModel.cryptoCard,
+                        title: $titleMovers,
+                        textButton: $textButtonMovers)
                 }
                 .padding(.horizontal)
             }
@@ -36,6 +36,9 @@ struct MarketView: View {
             BottomBarView(currentView: .market)
         }
         .background(Color.black.ignoresSafeArea())
+        .task {
+            await viewModel.loadCryptoCards(limit: 10)
+        }
     }
 }
 

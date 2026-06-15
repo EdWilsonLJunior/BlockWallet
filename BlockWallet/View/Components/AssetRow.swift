@@ -64,7 +64,7 @@ struct AssetRow: View {
                         .foregroundColor(.gray)
                         .font(.caption)
                     
-                    Text("(+\(coin.priceChangePercentege24h))")
+                    Text("(+\(coin.priceChangePercentage24h))")
                         .foregroundColor(.green)
                         .font(.caption)
                 }
