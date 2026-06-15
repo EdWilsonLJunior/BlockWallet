@@ -44,7 +44,7 @@ struct SelectTokenView: View {
             ScrollView {
                 VStack(spacing: 16) {
                     
-                    ForEach(filteredCoins) { coin in
+                    ForEach(filteredCoins, id: \.id) { coin in
                         
                         Button {
                             //onSelect(coin)
@@ -88,13 +88,10 @@ struct SelectTokenView: View {
                                 
                                 Spacer()
                                 
-                                // Preço + Market Rank
+                                // Variação 24h
                                 VStack(alignment: .trailing) {
-                                    Text(coin.currentPrive)
-                                        .foregroundColor(.white)
-                                    
-                                    Text("#\(coin.marketCapRank)")
-                                        .foregroundColor(.gray)
+                                    Text(String(format: "%.2f%%", coin.priceChangePercentage24h))
+                                        .foregroundColor(coin.priceChangePercentage24h >= 0 ? .green : .red)
                                         .font(.caption)
                                 }
                             }
