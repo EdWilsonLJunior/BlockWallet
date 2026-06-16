@@ -132,8 +132,8 @@ https://blockwallet-api.onrender.com
 | Aecio Pereira Santiago Junior                 |  Backend/API  |
 | Arthur Vinicius Gomes Santos Mendes Oliveira  |  Backend/API  |
 | Ed Wilson Luciano Junior                      |  Views        |
-| Jonathan Bach dos Santos                      |               |
-| Silas Nunes Cardoso                           |               |
+| Jonathan Bach dos Santos                      |  Views        |
+| Silas Nunes Cardoso                           |  Integração   |
 | Wyllian Fonseca Sales                         |  Integração   |
 
 ---
