@@ -11,7 +11,7 @@ struct DashboardView: View {
     var body: some View {
         
         ZStack {
-            Color.black.ignoresSafeArea()
+            AppGradient.primary.ignoresSafeArea().ignoresSafeArea()
             
             VStack(spacing: 20) {
                 

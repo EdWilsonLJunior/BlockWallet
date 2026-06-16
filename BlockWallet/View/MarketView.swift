@@ -35,7 +35,7 @@ struct MarketView: View {
             
             BottomBarView(currentView: .market)
         }
-        .background(Color.black.ignoresSafeArea())
+        .background(AppGradient.primary.ignoresSafeArea().ignoresSafeArea())
         .task {
             await viewModel.loadCryptoCards(limit: 10)
         }

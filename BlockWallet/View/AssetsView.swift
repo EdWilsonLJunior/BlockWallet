@@ -33,7 +33,7 @@ struct AssetsView: View {
             BottomBarView(currentView: .assets)
         }
         .padding()
-        .background(Color.black.ignoresSafeArea())
+        .background(AppGradient.primary.ignoresSafeArea().ignoresSafeArea())
     }
 }
 
