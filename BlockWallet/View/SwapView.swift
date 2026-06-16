@@ -116,7 +116,7 @@ struct SwapView: View {
                 BottomBarView()
             }
             .padding()
-            .background(Color.black.ignoresSafeArea())
+            .background(AppGradient.primary.ignoresSafeArea().ignoresSafeArea())
             .sheet(isPresented: $showSwapModal) {
                 SwapConfirmView()
             }

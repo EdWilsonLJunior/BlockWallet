@@ -111,7 +111,7 @@ struct DetailCoin: View {
             }
         }
         .padding()
-        .background(Color.black.ignoresSafeArea())
+        .background(AppGradient.primary.ignoresSafeArea().ignoresSafeArea())
     }
 }
 

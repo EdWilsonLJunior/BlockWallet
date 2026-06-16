@@ -95,7 +95,7 @@ struct RegisterView: View {
                     
                 }
                 .padding()
-                .background(Color.black.ignoresSafeArea())
+                .background(AppGradient.primary.ignoresSafeArea().ignoresSafeArea())
             }
             .navigationDestination(isPresented: $toLogin) {
                 LoginView()

@@ -90,7 +90,7 @@ struct LoginView: View {
                 }
             }
             .padding()
-            .background(Color.black.ignoresSafeArea())
+            .background(AppGradient.primary.ignoresSafeArea())
         }
         .navigationBarBackButtonHidden(true)
     }
