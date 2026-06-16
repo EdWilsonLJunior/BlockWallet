@@ -10,7 +10,7 @@ struct AmountField: View {
     var body: some View {
         HStack {
             
-            TextField("Search Token", text: $value)
+            TextField("Buscar Moeda", text: $value)
                 .foregroundColor(.white)
             
             Spacer()
