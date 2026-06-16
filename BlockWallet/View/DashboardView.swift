@@ -21,8 +21,6 @@ struct DashboardView: View {
                 
                 ActionsView()
                 
-                BuyCryptoCard()
-                
                 TopMoversView(
                     cryptoCard: dashboardViewModel.cryptoCard,
                     title: $titleMovers,
