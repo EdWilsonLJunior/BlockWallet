@@ -47,8 +47,6 @@ struct LoginView: View {
                         text: $password
                     )
                     
-                    BiometricToggleCard(isEnabled: $enableBiometric)
-                    
                     Spacer()
                     
                     PrimaryButton(title: isLoading ? "Entrando..." : "Entrar") {
