@@ -9,6 +9,8 @@ import Foundation
 
 protocol CryptoCoinRepositoryProtocol {
     func getCoins(limit: Int) async throws -> [CryptoCoinResponse]
+    func getCoinDetail(id: String) async throws -> CryptoCoinDetailResponse
+    func getChart(id: String) async throws -> [ChartDataPoint]
 }
 
 class CryptoCoinRepository: CryptoCoinRepositoryProtocol {
@@ -46,5 +48,21 @@ class CryptoCoinRepository: CryptoCoinRepositoryProtocol {
 //                )
 //            }
         }
+    }
+    
+    func getCoinDetail(id: String) async throws -> CryptoCoinDetailResponse {
+        //do {
+            let cryptCoinDetailresponse = try await CryptoCoinService.shared.getCoinDetail(id: id)
+            
+            return cryptCoinDetailresponse
+       /* } catch {
+            return nil
+        }*/
+    }
+    
+    func getChart(id: String) async throws -> [ChartDataPoint] {
+        let chartResponse = try await CryptoCoinService.shared.fetchChart(id: id)
+        print(chartResponse)
+        return chartResponse
     }
 }

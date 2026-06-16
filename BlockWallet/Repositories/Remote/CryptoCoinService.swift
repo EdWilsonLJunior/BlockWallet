@@ -36,4 +36,53 @@ class CryptoCoinService {
             throw NetworkError.decodingError
         }
     }
+    
+    func getCoinDetail(id: String) async throws -> CryptoCoinDetailResponse {
+        guard let url = URL(string: "\(Constants.API_URL)/api/v1/coins/\(id)") else {
+            throw NetworkError.invalidURL
+        }
+        
+        let (data, reponse) = try await URLSession.shared.data(from: url)
+        
+        do {
+            guard let http = reponse as? HTTPURLResponse, http.statusCode == 200 else {
+                throw NetworkError.invalidResponse
+            }
+            
+            let responseData = try JSONDecoder().decode(ResponseData<CryptoCoinDetailResponse>.self, from: data)
+            
+            return responseData.data
+        } catch {
+            print(error.localizedDescription)
+            throw NetworkError.decodingError
+        }
+        
+    }
+    
+    func fetchChart(id: String) async throws -> [ChartDataPoint] {
+        guard let url = URL(string: "\(Constants.API_URL)/api/v1/coins/\(id)/chart") else {
+            throw NetworkError.invalidURL
+        }
+        
+        print(url.absoluteString)
+
+        let (data, _) = try await URLSession.shared.data(from: url)
+        
+        do {
+            let response  = try JSONDecoder().decode(CoinChartResponse.self, from: data)
+
+            return response.data.prices.map { values in
+                ChartDataPoint(
+                    timestamp: Date(timeIntervalSince1970: values[0] / 1000),
+                    price: values[1]
+                )
+            }
+        } catch {
+            print(error.localizedDescription)
+            throw NetworkError.decodingError
+        }
+        
+        
+    }
+
 }
