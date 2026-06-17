@@ -13,7 +13,7 @@ struct WalletHeaderView: View {
         HStack(spacing: 16) {
             
             Circle()
-                .fill(Color.orange)
+                .fill(Color.orange.mix(with: .black, by: 0.5))
                 .frame(width: 60, height: 60)
             
             VStack(alignment: .leading, spacing: 4) {
@@ -34,7 +34,7 @@ struct WalletHeaderView: View {
             Spacer()
             
             // reutilizando PrimaryButton (adaptado)
-            PrimaryButtonSmall(title: "Editar")
+            //PrimaryButtonSmall(title: "Editar")
         }
     }
 }

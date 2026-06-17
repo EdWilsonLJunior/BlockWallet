@@ -21,16 +21,16 @@ struct BalanceView: View {
                     .foregroundColor(.blue)
             }
             
-            Text("$309567.55")
+            Text("R$ 43.000,00")
                 .font(.system(size: 34, weight: .bold))
                 .foregroundColor(.white)
             
-            Text("+4.5%")
+            Text("-4.5%")
                 .font(.caption)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)
                 .background(Color.blue.opacity(0.2))
-                .foregroundColor(.blue)
+                .foregroundColor(.red)
                 .cornerRadius(10)
         }
     }

@@ -6,14 +6,14 @@ struct ActionsView: View {
 
     var body: some View {
         HStack(spacing: 40) {
-            ActionItem(icon: "arrow.up", title: "Vendido") {
-                historyFilter = .sell
+            ActionItem(icon: "arrow.left.arrow.right", title: "Todos") {
+                historyFilter = .all
             }
             ActionItem(icon: "arrow.down", title: "Comprado") {
                 historyFilter = .buy
             }
-            ActionItem(icon: "arrow.left.arrow.right", title: "Todos") {
-                historyFilter = .all
+            ActionItem(icon: "arrow.up", title: "Vendido") {
+                historyFilter = .sell
             }
         }
         .sheet(item: $historyFilter) { filter in

@@ -29,8 +29,8 @@ struct MenuView: View {
                         MenuItem(icon: "arrow.up.arrow.down", title: "Swap")
                     }
                     
-                    NavigationLink(destination: AssetsView(coins: mockCoins)) {
-                        MenuItem(icon: "wallet.pass", title: "Assets")
+                    NavigationLink(destination: AssetsView()) {
+                        MenuItem(icon: "wallet.bifold", title: "Assets")
                     }
                 }
                 
