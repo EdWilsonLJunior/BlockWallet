@@ -121,10 +121,86 @@ A aplicação consome uma API REST hospedada em:
 https://blockwallet-api.onrender.com
 ```
 
-| Método | Endpoint               | Descrição           |
-|--------|------------------------|---------------------|
-| `POST` | `/api/v1/auth/sign-up` | Cadastro de usuário |
-| `POST` | `/api/v1/auth/sign-in` | Login de usuário    |
+### Health
+
+| Método | Endpoint          | Descrição                  |
+|--------|-------------------|----------------------------|
+| `GET`  | `/api/v1/health`  | Verificar status da API    |
+
+### Autenticação
+
+| Método | Endpoint                  | Descrição                        |
+|--------|---------------------------|----------------------------------|
+| `POST` | `/api/v1/auth/sign-up`    | Cadastro de usuário              |
+| `POST` | `/api/v1/auth/sign-in`    | Login com e-mail e senha         |
+| `POST` | `/api/v1/auth/me`         | Dados do usuário autenticado     |
+| `POST` | `/api/v1/auth/sign-out`   | Encerrar sessão ativa            |
+
+### Perfil
+
+| Método   | Endpoint                    | Descrição                              |
+|----------|-----------------------------|----------------------------------------|
+| `GET`    | `/api/v1/profile`           | Buscar perfil do usuário autenticado   |
+| `PATCH`  | `/api/v1/profile`           | Atualizar dados do perfil              |
+| `GET`    | `/api/v1/profile/dashboard` | Dashboard com saldo e ativos           |
+
+### Preferências
+
+| Método | Endpoint               | Descrição                              |
+|--------|------------------------|----------------------------------------|
+| `GET`  | `/api/v1/preferences`  | Buscar preferências do usuário         |
+| `PUT`  | `/api/v1/preferences`  | Salvar tema, período e ordenação       |
+
+### Moedas (Coins)
+
+| Método | Endpoint                          | Descrição                              |
+|--------|-----------------------------------|----------------------------------------|
+| `GET`  | `/api/v1/coins/markets`           | Listar top 10 moedas por market cap    |
+| `GET`  | `/api/v1/coins/price/simple`      | Preço atual de múltiplas moedas        |
+| `GET`  | `/api/v1/coins/search/query?q=`   | Buscar moedas por nome                 |
+| `GET`  | `/api/v1/coins/:id`               | Detalhes de uma moeda (popula cache)   |
+| `GET`  | `/api/v1/coins/:id/chart?days=`   | Histórico de preços por período        |
+
+### Carteira (Wallet)
+
+| Método | Endpoint              | Descrição                                        |
+|--------|-----------------------|--------------------------------------------------|
+| `GET`  | `/api/v1/wallet`      | Listar ativos da carteira                        |
+| `POST` | `/api/v1/wallet/buy`  | Comprar criptomoeda (requer cache via GET coins) |
+| `POST` | `/api/v1/wallet/sell` | Vender criptomoeda                               |
+| `GET`  | `/api/v1/wallet/:id`  | Posição atual de uma moeda específica            |
+
+### Transações
+
+| Método | Endpoint                         | Descrição                              |
+|--------|----------------------------------|----------------------------------------|
+| `GET`  | `/api/v1/transactions`           | Histórico completo paginado            |
+| `GET`  | `/api/v1/transactions?type=`     | Filtrar transações por tipo (buy/sell) |
+| `GET`  | `/api/v1/transactions/summary`   | Resumo de totais comprado/vendido      |
+
+### Favoritos
+
+| Método   | Endpoint                         | Descrição                          |
+|----------|----------------------------------|------------------------------------|
+| `POST`   | `/api/v1/favorites`              | Favoritar uma moeda                |
+| `GET`    | `/api/v1/favorites`              | Listar favoritos                   |
+| `GET`    | `/api/v1/favorites/:id/check`    | Verificar se uma moeda é favorita  |
+| `DELETE` | `/api/v1/favorites/:id`          | Remover moeda dos favoritos        |
+
+### Portfolio
+
+| Método | Endpoint                             | Descrição                        |
+|--------|--------------------------------------|----------------------------------|
+| `POST` | `/api/v1/portfolio/snapshots`        | Gravar snapshot do dia           |
+| `GET`  | `/api/v1/portfolio/snapshots?days=`  | Buscar histórico de snapshots    |
+
+### Alertas
+
+| Método  | Endpoint                          | Descrição                  |
+|---------|-----------------------------------|----------------------------|
+| `POST`  | `/api/v1/alerts`                  | Criar alerta de preço      |
+| `GET`   | `/api/v1/alerts`                  | Listar alertas ativos      |
+| `PATCH` | `/api/v1/alerts/:id/deactivate`   | Desativar um alerta        |
 
 ---
 
