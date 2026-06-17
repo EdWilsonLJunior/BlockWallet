@@ -28,15 +28,16 @@ struct DashboardView: View {
                     title: $titleMovers,
                     textButton: $textButtonMovers)
                 
-                Spacer()
-                
-                BottomBarView(currentView: .home)
             }
             .padding()
         }
         .navigationBarBackButtonHidden(true)
-        .task {
-            await dashboardViewModel.loadCryptoCards(limit: 4)
+        .onAppear {
+            Task {
+                async let coins: () = dashboardViewModel.loadCryptoCards(limit: 20)
+                async let balance: () = WalletBalanceStore.shared.refresh()
+                _ = await (coins, balance)
+            }
         }
     }
 }

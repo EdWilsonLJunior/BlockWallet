@@ -2,57 +2,59 @@ import SwiftUI
 
 struct MenuView: View {
     @Environment(SessionManager.self) private var session
-    
+
+    var onClose: () -> Void
+    var switchTab: (TabBarItem) -> Void
+
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
-            
-            VStack(spacing: 24) {
-                
-                Text("Menu")
-                    .font(.title2)
-                    .bold()
-                    .foregroundColor(.white)
-                
+            Color(white: 0.08).ignoresSafeArea()
+
+            VStack(alignment: .leading, spacing: 24) {
+
+                HStack {
+                    Spacer()
+                    Button(action: onClose) {
+                        Image(systemName: "xmark")
+                            .foregroundColor(.gray)
+                            .padding(8)
+                    }
+                }
+
                 WalletHeaderView()
-                
-                VStack(spacing: 20) {
-                    NavigationLink(destination: DashboardView()) {
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Button { switchTab(.home) } label: {
                         MenuItem(icon: "house", title: "Home")
                     }
-                    
-                    NavigationLink(destination: MarketView(coins: mockCoins)) {
+                    Button { switchTab(.market) } label: {
                         MenuItem(icon: "chart.bar", title: "Market")
                     }
-                    
                     NavigationLink(destination: SwapView()) {
                         MenuItem(icon: "arrow.up.arrow.down", title: "Swap")
                     }
-                    
-                    NavigationLink(destination: AssetsView(coins: mockCoins)) {
+                    Button { switchTab(.assets) } label: {
                         MenuItem(icon: "wallet.pass", title: "Assets")
                     }
                 }
-                
+
                 Divider()
                     .background(Color.gray.opacity(0.4))
+
                 Button {
                     session.logout()
                 } label: {
                     MenuItem(icon: "arrow.backward.circle", title: "Log Out", isDestructive: true)
                 }
-                                    
+
                 Spacer()
-                
-                BottomBarView(currentView: .menu)
             }
             .padding()
         }
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 #Preview {
-    MenuView()
+    MenuView(onClose: {}, switchTab: { _ in })
         .environment(SessionManager())
 }

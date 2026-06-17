@@ -6,6 +6,12 @@ struct TopMoversView: View {
     @Binding var title: String
     @Binding var textButton: String
     
+    @State private var showAll: Bool = false
+    
+    private var displayedCoins: [CryptoCardViewModel] {
+        showAll ? cryptoCard : Array(cryptoCard.prefix(6))
+    }
+    
     let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 12),
         GridItem(.flexible(), spacing: 12),
@@ -21,14 +27,20 @@ struct TopMoversView: View {
                 
                 Spacer()
                 
-                Text(textButton)
-                    .foregroundColor(.blue)
-                    .font(.caption)
-                    .padding()
+                Button {
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        showAll.toggle()
+                    }
+                } label: {
+                    Text(showAll ? "Ver Menos" : textButton)
+                        .foregroundColor(.blue)
+                        .font(.caption)
+                        .padding()
+                }
             }
             
             LazyVGrid(columns: columns, spacing: 16 ) {
-                ForEach(cryptoCard, id: \.id) { coin in
+                ForEach(displayedCoins, id: \.id) { coin in
                     HStack(spacing: 8) {
                         NavigationLink {
                             DetailCoin()

@@ -28,9 +28,6 @@ struct AssetsView: View {
                 }
             }
             
-            Spacer()
-            
-            BottomBarView(currentView: .assets)
         }
         .padding()
         .background(Color.black.ignoresSafeArea())

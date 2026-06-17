@@ -12,7 +12,7 @@ protocol CryptoCoinRepositoryProtocol {
 }
 
 class CryptoCoinRepository: CryptoCoinRepositoryProtocol {
-    
+
     //private let local: CryptoCoinLocalService
     
 //    init(local: CryptoCoinLocalService) {

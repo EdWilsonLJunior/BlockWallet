@@ -1,49 +1,24 @@
 import SwiftUI
 
 struct SwapView: View {
-    
-    @State private var payAmount: String = ""
-    @State private var receiveAmount: String = ""
-    @State private var showSwapModal = false
+
+    @StateObject private var viewModel = SwapViewModel()
     @State private var showCoinSelector = false
-    @State private var selectedCoin = "BTC"
-    @State private var selectedDestinyCoin = "ETH"
-    
-    func swapValues() {
-        let temp = payAmount
-        payAmount = receiveAmount
-        receiveAmount = temp
-    }
-    
-    let mockCoins: [CryptoCoin] = [
-        CryptoCoin(
-            id: "bitcoin",
-            name: "Bitcoin",
-            symbol: "btc",
-            //currentPrive: "$29,000",
-            image: "btc", // ou URL
-            priceChangePercentage24h: -0.66051,
-            //marketCapRank: "1"
-        ),
-        CryptoCoin(
-            id: "ethereum",
-            name: "Ethereum",
-            symbol: "eth",
-           // currentPrive: "$1,800",
-            image: "eth",
-            priceChangePercentage24h: -0.66051,
-           // marketCapRank: "2"
-        )
-    ]
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 24) {
+        VStack(spacing: 24) {
                 
                 // Header
                 Text("Swap")
                     .foregroundColor(.white)
                     .font(.headline)
+
+                Picker("Tipo de operação", selection: $viewModel.tradeSide) {
+                    ForEach(SwapViewModel.TradeSide.allCases) { side in
+                        Text(side.title).tag(side)
+                    }
+                }
+                .pickerStyle(.segmented)
                 
                 Spacer().frame(height: 10)
                 
@@ -55,27 +30,16 @@ struct SwapView: View {
                         .font(.subheadline)
                     
                     AmountField(
-                        value: $payAmount,
-                        coin: selectedCoin,
+                        value: $viewModel.quantityText,
+                        coin: viewModel.selectedSymbol,
                         icon: "bitcoinsign.circle"
                     ) {
                         showCoinSelector = true
                     }
                     
-                    Text("Quantidade: 100 BTC")
+                    Text(viewModel.quantityHint)
                         .foregroundColor(.gray)
                         .font(.caption)
-                }
-                
-                // Swap Button (invert)
-                Button {
-                    swapValues()
-                } label: {
-                    Image(systemName: "arrow.up.arrow.down")
-                        .foregroundColor(.blue)
-                        .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .clipShape(Circle())
                 }
                 
                 // YOU RECEIVE
@@ -87,47 +51,80 @@ struct SwapView: View {
                     
                     
                     AmountField(
-                        value: $receiveAmount,
-                        coin: selectedDestinyCoin,
+                                            value: .constant(viewModel.totalEstimateText),
+                                            coin: "USD",
                         icon: "circle.hexagongrid.fill"
                     ) {
-                        showCoinSelector = true
+                                            // not selectable
                     }
                     
-                    Text("Quantidade: 100 BTC")
+                                        Text("Valor estimado da compra")
                         .foregroundColor(.gray)
                         .font(.caption)
                 }
                 
                 // Rate
-                Text("1 BTC ≈ 1000 ETH")
+                                    Text(viewModel.rateText)
                     .foregroundColor(.gray)
                     .font(.footnote)
+
+                                    if viewModel.isLoading {
+                                        ProgressView()
+                                            .tint(.white)
+                                    }
                 
                 Spacer()
                 
                 // Swap Button
-                PrimaryButton(title: "Swap") {
-                    showSwapModal = true
+                                    PrimaryButton(title: viewModel.actionButtonTitle) {
+                                        Task {
+                                            await viewModel.executeTrade()
+                                        }
                 }
+                                    .disabled(viewModel.isBuying || viewModel.isLoading)
                 
-                Spacer()
-                
-                BottomBarView()
             }
             .padding()
             .background(Color.black.ignoresSafeArea())
-            .sheet(isPresented: $showSwapModal) {
-                SwapConfirmView()
-            }
             .sheet(isPresented: $showCoinSelector) {
-                SelectTokenView(coins: mockCoins) { selected in
-                    selectedCoin = selected.symbol
+                                    SelectTokenView(coins: viewModel.coins) { selected in
+                                        Task {
+                                            await viewModel.selectCoin(selected)
+                                        }
                     showCoinSelector = false
                 }
             }
-
-        }
+                                .task {
+                                    await viewModel.loadInitialData()
+                                }
+                                .alert("Sucesso", isPresented: Binding(
+                                    get: { viewModel.successMessage != nil },
+                                    set: { newValue in
+                                        if !newValue {
+                                            viewModel.successMessage = nil
+                                        }
+                                    }
+                                )) {
+                                    Button("OK", role: .cancel) {
+                                        viewModel.successMessage = nil
+                                    }
+                                } message: {
+                                    Text(viewModel.successMessage ?? "")
+                                }
+                                .alert("Erro", isPresented: Binding(
+                                    get: { viewModel.errorMessage != nil },
+                                    set: { newValue in
+                                        if !newValue {
+                                            viewModel.errorMessage = nil
+                                        }
+                                    }
+                                )) {
+                                    Button("OK", role: .cancel) {
+                                        viewModel.errorMessage = nil
+                                    }
+                                } message: {
+                                    Text(viewModel.errorMessage ?? "")
+                                }
     }
     
 }

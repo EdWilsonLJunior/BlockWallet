@@ -47,7 +47,7 @@ struct SelectTokenView: View {
                     ForEach(filteredCoins, id: \.id) { coin in
                         
                         Button {
-                            //onSelect(coin)
+                            onSelect(coin)
                         } label: {
                             HStack(spacing: 12) {
                                 

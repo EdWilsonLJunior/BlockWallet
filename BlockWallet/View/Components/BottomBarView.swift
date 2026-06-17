@@ -1,43 +1,44 @@
 import SwiftUI
 
 struct BottomBarView: View {
-    
-    var currentView: TabBarItem = .home
-    
+
+    @Binding var currentTab: TabBarItem
+    var switchTab: (TabBarItem) -> Void
+
     var body: some View {
         ZStack {
-            
+
             HStack {
-                NavItem(icon: "house", title: "Home", item: currentView, currentPage: .home ) {
-                    DashboardView()
+                NavItem(icon: "house", title: "Home", item: .home, currentPage: currentTab) {
+                    switchTab(.home)
                 }
-                
+
                 Spacer()
                     .frame(width: 40)
-                
-                NavItem(icon: "chart.bar", title: "Market", item: currentView, currentPage: .market) {
-                    MarketView(coins: mockCoins)
+
+                NavItem(icon: "chart.bar", title: "Market", item: .market, currentPage: currentTab) {
+                    switchTab(.market)
                 }
-                
+
                 Spacer()
                     .frame(width: 80)
-                
-                NavItem(icon: "wallet.pass", title: "Assets", item: currentView, currentPage: .assets) {
-                    AssetsView(coins: mockCoins)
+
+                NavItem(icon: "wallet.pass", title: "Assets", item: .assets, currentPage: currentTab) {
+                    switchTab(.assets)
                 }
-                
+
                 Spacer()
                     .frame(width: 40)
-                
-                NavItem(icon: "line.3.horizontal", title: "Menu", item: currentView, currentPage: .menu) {
-                    MenuView()
+
+                NavItem(icon: "line.3.horizontal", title: "Menu", item: .menu, currentPage: currentTab) {
+                    switchTab(.menu)
                 }
             }
             .frame(maxWidth: .infinity)
             .padding()
             .background(Color.white.opacity(0.05))
             .clipShape(RoundedRectangle(cornerRadius: 30))
-            
+
             NavigationLink(destination: SwapView()) {
                 Circle()
                     .fill(Color.blue)
@@ -54,5 +55,7 @@ struct BottomBarView: View {
 }
 
 #Preview {
-    BottomBarView()
+    NavigationStack {
+        BottomBarView(currentTab: .constant(.home), switchTab: { _ in })
+    }
 }
