@@ -12,77 +12,205 @@ enum NetworkError: Error {
     case invalidResponse
     case invalidData
     case decodingError
+    case unauthorized
 }
 
 class CryptoCoinService {
     
     init () {}
     static let shared = CryptoCoinService()
+
+    private let coinGeckoService = CoinGeckoService.shared
     
     func getCoins(limit: Int) async throws -> [CryptoCoinResponse] {
-        guard let url = URL(string: "\(Constants.API_URL)/api/v1/coins/markets?page=1&per_page=\(limit)&vs_currencies=brl") else {
-            throw NetworkError.invalidURL
-        }
-        
-        let (data, _) = try await URLSession.shared.data(from: url)
-        
-        do {
-            
-            let responseData = try JSONDecoder().decode(ResponseData<[CryptoCoinResponse]>.self, from: data)
-            return responseData.data
-            
-        } catch {
-            print(error.localizedDescription)
-            throw NetworkError.decodingError
-        }
+        try await coinGeckoService.fetchMarkets(perPage: limit, vsCurrency: "brl")
     }
-    
+
     func getCoinDetail(id: String) async throws -> CryptoCoinDetailResponse {
-        guard let url = URL(string: "\(Constants.API_URL)/api/v1/coins/\(id)") else {
-            throw NetworkError.invalidURL
-        }
-        
-        let (data, reponse) = try await URLSession.shared.data(from: url)
-        
-        do {
-            guard let http = reponse as? HTTPURLResponse, http.statusCode == 200 else {
-                throw NetworkError.invalidResponse
-            }
-            
-            let responseData = try JSONDecoder().decode(ResponseData<CryptoCoinDetailResponse>.self, from: data)
-            
-            return responseData.data
-        } catch {
-            print(error.localizedDescription)
-            throw NetworkError.decodingError
-        }
-        
+        try await coinGeckoService.fetchCryptoCoinDetail(id: id)
     }
-    
+
     func fetchChart(id: String) async throws -> [ChartDataPoint] {
-        guard let url = URL(string: "\(Constants.API_URL)/api/v1/coins/\(id)/chart") else {
-            throw NetworkError.invalidURL
+        let chartResponse = try await coinGeckoService.fetchMarketChart(id: id)
+        return chartResponse.prices.compactMap { pair -> ChartDataPoint? in
+            guard pair.count >= 2 else { return nil }
+            return ChartDataPoint(
+                timestamp: Date(timeIntervalSince1970: pair[0] / 1000),
+                price: pair[1]
+            )
         }
-        
-        print(url.absoluteString)
-
-        let (data, _) = try await URLSession.shared.data(from: url)
-        
-        do {
-            let response  = try JSONDecoder().decode(CoinChartResponse.self, from: data)
-
-            return response.data.prices.map { values in
-                ChartDataPoint(
-                    timestamp: Date(timeIntervalSince1970: values[0] / 1000),
-                    price: values[1]
-                )
-            }
-        } catch {
-            print(error.localizedDescription)
-            throw NetworkError.decodingError
-        }
-        
-        
     }
 
+    func getDashboardBalance(accessToken: String) async throws -> Double {
+        guard let url = URL(string: "\(Constants.API_URL)/api/v1/profile/dashboard") else {
+            throw NetworkError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkError.invalidResponse
+        }
+        if httpResponse.statusCode == 401 { throw NetworkError.unauthorized }
+        guard (200...299).contains(httpResponse.statusCode) else { throw NetworkError.invalidData }
+
+        let decoded = try JSONDecoder().decode(ResponseData<DashboardData>.self, from: data)
+        return decoded.data.simulatedBalanceUsd
+    }
+
+    func getSimplePrice(coinId: String) async throws -> Double {
+        let prices = try await coinGeckoService.fetchPrice(ids: [coinId], vsCurrencies: ["usd"])
+        guard let coinPrice = prices[coinId],
+              let price = coinPrice["usd"] else {
+            throw NetworkError.invalidData
+        }
+        return price
+    }
+
+    func buyCrypto(request buyRequest: BuyCryptoRequest, accessToken: String) async throws {
+        guard let url = URL(string: "\(Constants.API_URL)/api/v1/wallet/buy") else {
+            throw NetworkError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.httpBody = try JSONEncoder().encode(buyRequest)
+
+        let (_, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkError.invalidResponse
+        }
+
+        if httpResponse.statusCode == 401 {
+            throw NetworkError.unauthorized
+        }
+
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw NetworkError.invalidData
+        }
+    }
+
+    func sellCrypto(request sellRequest: BuyCryptoRequest, accessToken: String) async throws {
+        guard let url = URL(string: "\(Constants.API_URL)/api/v1/wallet/sell") else {
+            throw NetworkError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.httpBody = try JSONEncoder().encode(sellRequest)
+
+        let (_, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkError.invalidResponse
+        }
+
+        if httpResponse.statusCode == 401 {
+            throw NetworkError.unauthorized
+        }
+
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw NetworkError.invalidData
+        }
+    }
+
+    func getWalletBalance(accessToken: String) async throws -> Double {
+        guard let url = URL(string: "\(Constants.API_URL)/api/v1/wallet") else {
+            throw NetworkError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkError.invalidResponse
+        }
+
+        if httpResponse.statusCode == 401 {
+            throw NetworkError.unauthorized
+        }
+
+        guard (200...299).contains(httpResponse.statusCode) else {
+            throw NetworkError.invalidData
+        }
+
+        let json = try JSONSerialization.jsonObject(with: data)
+        guard let root = json as? [String: Any], let payload = root["data"] else {
+            throw NetworkError.invalidData
+        }
+
+        guard let balance = extractWalletBalance(from: payload) else {
+            throw NetworkError.invalidData
+        }
+
+        return balance
+    }
+
+    private func extractWalletBalance(from payload: Any) -> Double? {
+        let candidateKeys = [
+            "totalBalance",
+            "balance",
+            "walletBalance",
+            "availableBalance",
+            "fiatBalance",
+            "cashBalance",
+            "brlBalance",
+            "usdBalance",
+            "total_balance",
+            "total_brl",
+            "total_usd"
+        ]
+
+        if let dictionary = payload as? [String: Any] {
+            for key in candidateKeys {
+                if let value = dictionary[key], let number = numericValue(from: value) {
+                    return number
+                }
+            }
+
+            for value in dictionary.values {
+                if let number = extractWalletBalance(from: value) {
+                    return number
+                }
+            }
+        }
+
+        if let array = payload as? [Any] {
+            for item in array {
+                if let number = extractWalletBalance(from: item) {
+                    return number
+                }
+            }
+        }
+
+        return nil
+    }
+
+    private func numericValue(from value: Any) -> Double? {
+        if let number = value as? NSNumber {
+            return number.doubleValue
+        }
+
+        if let number = value as? Double {
+            return number
+        }
+
+        if let number = value as? Int {
+            return Double(number)
+        }
+
+        if let text = value as? String {
+            return Double(text.replacingOccurrences(of: ",", with: "."))
+        }
+
+        return nil
+    }
 }

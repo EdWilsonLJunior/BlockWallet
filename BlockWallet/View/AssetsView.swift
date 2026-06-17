@@ -171,7 +171,6 @@ struct AssetsView: View {
 
                 Spacer()
 
-                BottomBarView(currentView: .assets)
             }
             .padding()
         }
