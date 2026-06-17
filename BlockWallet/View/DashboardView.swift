@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct DashboardView: View {
-    @StateObject private var dashboardViewModel: DashboardViewModel = DashboardViewModel()
+    @StateObject private var dashboardViewModel = DashboardViewModel.shared
     
     @State private var titleMovers: String = "Maiores Movimentações"
     @State private var textButtonMovers: String = "Ver Todos"
@@ -26,16 +26,10 @@ struct DashboardView: View {
                     title: $titleMovers,
                     textButton: $textButtonMovers)
                 
-                Spacer()
-                
-                BottomBarView(currentView: .home)
             }
             .padding()
         }
         .navigationBarBackButtonHidden(true)
-        .task {
-            await dashboardViewModel.loadCryptoCards(limit: 4)
-        }
     }
 }
 

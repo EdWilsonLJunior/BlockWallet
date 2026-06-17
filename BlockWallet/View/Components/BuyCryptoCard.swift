@@ -2,10 +2,10 @@ import SwiftUI
 
 struct BuyCryptoCard: View {
     
-    @State private var show: Bool = true
+    @AppStorage("buyCryptoCardDismissed") private var dismissed: Bool = false
     
     var body: some View {
-        if show {
+        if !dismissed {
             VStack(alignment: .leading, spacing: 16) {
                 
                 HStack {
@@ -16,7 +16,7 @@ struct BuyCryptoCard: View {
                     Spacer()
                     
                     Button {
-                        show = false
+                        dismissed = true
                     } label: {
                         Image(systemName: "xmark")
                             .foregroundColor(.gray)
