@@ -20,19 +20,19 @@ struct SwapView: View {
             id: "bitcoin",
             name: "Bitcoin",
             symbol: "btc",
-            currentPrive: "$29,000",
-            priceChangePercentege24h: "2.5%",
+            //currentPrive: "$29,000",
             image: "btc", // ou URL
-            marketCapRank: "1"
+            priceChangePercentage24h: -0.66051,
+            //marketCapRank: "1"
         ),
         CryptoCoin(
             id: "ethereum",
             name: "Ethereum",
             symbol: "eth",
-            currentPrive: "$1,800",
-            priceChangePercentege24h: "-1.2%",
+           // currentPrive: "$1,800",
             image: "eth",
-            marketCapRank: "2"
+            priceChangePercentage24h: -0.66051,
+           // marketCapRank: "2"
         )
     ]
 
@@ -116,7 +116,7 @@ struct SwapView: View {
                 BottomBarView()
             }
             .padding()
-            .background(Color.black.ignoresSafeArea())
+            .background(AppGradient.primary.ignoresSafeArea().ignoresSafeArea())
             .sheet(isPresented: $showSwapModal) {
                 SwapConfirmView()
             }

@@ -2,8 +2,8 @@
   <h1>BlockWallet</h1>
   <p>Carteira de criptomoedas para iOS, construída com SwiftUI.</p>
 
-  ![Swift](https://img.shields.io/badge/Swift-5.9+-FA7343?style=flat&logo=swift&logoColor=white)
-  ![iOS](https://img.shields.io/badge/iOS-17.0+-000000?style=flat&logo=apple&logoColor=white)
+  ![Swift](https://img.shields.io/badge/Swift-6.0+-FA7343?style=flat&logo=swift&logoColor=white)
+  ![iOS](https://img.shields.io/badge/iOS-18.0+-000000?style=flat&logo=apple&logoColor=white)
   ![SwiftUI](https://img.shields.io/badge/SwiftUI-blue?style=flat&logo=swift&logoColor=white)
   ![SwiftData](https://img.shields.io/badge/SwiftData-orange?style=flat)
   ![Architecture](https://img.shields.io/badge/Architecture-MVVM-green?style=flat)
@@ -21,11 +21,12 @@
 
 - **Autenticação** — Login com e-mail e senha, com opção de habilitar biometria (Face ID / Touch ID)
 - **Cadastro** — Registro de novos usuários integrado à API REST
-- **Dashboard** — Visão geral do saldo, ações rápidas, card de compra de cripto e moedas em destaque
-- **Mercado** — Listagem de destaques, novidades e ativos com maior movimentação
-- **Ativos** — Lista de criptomoedas com busca e detalhamento de cada ativo
+- **Dashboard** — Visão geral do saldo, ações rápidas e moedas em destaque com maior movimentação
+- **Mercado** — Listagem de criptomoedas com variação de preço e acesso ao detalhe de cada ativo
+- **Carteira (Wallet)** — Saldo total do portfólio em R$, lista de ativos adquiridos com quantidade, valor e variação 24h calculados a partir do histórico de transações
 - **Swap** — Troca entre criptomoedas com seleção de token e confirmação de operação
-- **Menu** — Navegação lateral com acesso às seções do app
+- **Histórico** — Visualização de transações filtradas por tipo (Comprado / Vendido / Todos)
+- **Menu** — Navegação com acesso a todas as seções do app e opção de logout
 
 ### Criptomoedas Suportadas
 
@@ -33,6 +34,7 @@
 |---------|----------|
 | BTC     | Bitcoin  |
 | ETH     | Ethereum |
+| SOL     | Solana   |
 | BNB     | BNB      |
 | MATIC   | Polygon  |
 | XRP     | XRP      |
@@ -41,13 +43,14 @@
 
 ## Tecnologias
 
-| Tecnologia   | Uso                                       |
-|--------------|-------------------------------------------|
-| **SwiftUI**  | Construção de interfaces declarativas     |
-| **SwiftData**| Persistência local de dados               |
-| **Combine**  | Programação reativa no ViewModel          |
-| **URLSession**| Comunicação com a API REST               |
-| **MVVM**     | Padrão arquitetural do projeto            |
+| Tecnologia    | Uso                                       |
+|---------------|-------------------------------------------|
+| **SwiftUI**   | Construção de interfaces declarativas     |
+| **SwiftData** | Persistência local de dados               |
+| **Combine**   | Programação reativa nos ViewModels        |
+| **URLSession**| Comunicação com a API REST                |
+| **Keychain**  | Armazenamento seguro de tokens            |
+| **MVVM**      | Padrão arquitetural do projeto            |
 
 ---
 
@@ -56,30 +59,56 @@
 ```
 BlockWallet/
 ├── Models/
-│   ├── Coin.swift              # Model de criptomoeda (SwiftData)
-│   ├── User.swift              # Model de usuário
-│   ├── ResponseData.swift      # Model de resposta da API
-│   └── Enums/
-│       ├── TabBarItem.swift    # Itens da tab bar
-│       └── MenuRoute.swift     # Rotas do menu
+│   ├── CryptoCoin.swift            # Model de criptomoeda (SwiftData)
+│   ├── Transaction.swift           # Model de transação (compra/venda)
+│   ├── User.swift                  # Model de usuário
+│   ├── Login.swift                 # Model de login
+│   ├── ResponseData.swift          # Model de resposta da API
+│   ├── Enums/
+│   │   ├── TabBarItem.swift        # Itens da tab bar
+│   │   └── MenuRoute.swift         # Rotas do menu
+│   └── Responses/
+│       ├── CryptoCoinResponse.swift
+│       ├── CryptoCoinDetailResponse.swift
+│       └── CoinChartResponse.swift
 ├── View/
-│   ├── LoginView.swift         # Tela de login
-│   ├── RegisterView.swift      # Tela de cadastro
-│   ├── DashboardView.swift     # Tela principal
-│   ├── MarketView.swift        # Tela de mercado
-│   ├── AssetsView.swift        # Tela de ativos
-│   ├── SwapView.swift          # Tela de swap
-│   ├── DetailCoinView.swift    # Detalhe de criptomoeda
-│   ├── MenuView.swift          # Menu lateral
-│   └── Components/             # Componentes reutilizáveis
+│   ├── LoginView.swift             # Tela de login
+│   ├── RegisterView.swift          # Tela de cadastro
+│   ├── DashboardView.swift         # Tela principal
+│   ├── MarketView.swift            # Tela de mercado
+│   ├── AssetsView.swift            # Carteira — portfólio e ativos adquiridos
+│   ├── SwapView.swift              # Tela de swap
+│   ├── DetailCoinView.swift        # Detalhe de criptomoeda
+│   ├── MenuView.swift              # Menu de navegação
+│   └── Components/                 # Componentes reutilizáveis
+│       ├── BottomBarView.swift
+│       ├── HeaderView.swift
+│       ├── WalletHeaderView.swift
+│       ├── BalanceView.swift
+│       ├── ActionsView.swift
+│       ├── TopMoversView.swift
+│       ├── TransactionHistoryView.swift
+│       ├── AssetRow.swift
+│       ├── CandleChartView.swift
+│       ├── PriceLineChartView.swift
+│       └── ...
 ├── ViewModels/
-│   └── RegisterViewModel.swift # ViewModel de cadastro
+│   ├── DashboardViewModel.swift
+│   ├── DetailCoinViewModel.swift
+│   └── RegisterViewModel.swift
+├── Repositories/
+│   ├── CoinRepository.swift
+│   ├── Local/CryptoCoinLocalService.swift
+│   └── Remote/CryptoCoinService.swift
 ├── Services/
-│   └── UserService.swift       # Serviço de autenticação/usuário
+│   ├── KeychainService.swift       # Armazenamento seguro de tokens
+│   ├── SessionManager.swift        # Gerenciamento de sessão do usuário
+│   └── UserService.swift           # Serviço de autenticação
 ├── Utils/
-│   └── Constants.swift         # Constantes globais (URL da API)
+│   ├── AppGradient.swift           # Gradientes globais
+│   └── Constants.swift             # Constantes globais (URL da API)
 └── Resources/
-    └── Assets.xcassets/        # Imagens e ícones
+    └── Assets.xcassets/            # Imagens e ícones das moedas
 ```
 
 ---
@@ -95,6 +124,7 @@ https://blockwallet-api.onrender.com
 | Método | Endpoint               | Descrição           |
 |--------|------------------------|---------------------|
 | `POST` | `/api/v1/auth/sign-up` | Cadastro de usuário |
+| `POST` | `/api/v1/auth/sign-in` | Login de usuário    |
 
 ---
 
@@ -102,9 +132,9 @@ https://blockwallet-api.onrender.com
 
 ### Pré-requisitos
 
-- Xcode 15.0 ou superior
-- iOS 17.0+ (simulador ou dispositivo físico)
-- macOS Sonoma ou superior
+- Xcode 16.0 ou superior
+- iOS 18.0+ (simulador ou dispositivo físico)
+- macOS Sequoia ou superior
 
 ### Passos
 
@@ -115,7 +145,7 @@ https://blockwallet-api.onrender.com
 
 2. Abra o projeto no Xcode:
    ```bash
-   cd BlockWallet-main
+   cd BlockWallet
    open BlockWallet.xcodeproj
    ```
 
@@ -129,12 +159,12 @@ https://blockwallet-api.onrender.com
 
 | Nome | Responsabilidade |
 |------|-----------------|
-| Aecio Pereira Santiago Junior                 |  Backend/API  |
-| Arthur Vinicius Gomes Santos Mendes Oliveira  |  Backend/API  |
-| Ed Wilson Luciano Junior                      |  Views        |
-| Jonathan Bach dos Santos                      |  Views        |
-| Silas Nunes Cardoso                           |  Integração   |
-| Wyllian Fonseca Sales                         |  Integração   |
+| Aecio Pereira Santiago Junior                 | Backend / API   |
+| Arthur Vinicius Gomes Santos Mendes Oliveira  | Backend / API   |
+| Ed Wilson Luciano Junior                      | Views           |
+| Jonathan Bach dos Santos                      | Views           |
+| Silas Nunes Cardoso                           | Integração      |
+| Wyllian Fonseca Sales                         | Integração      |
 
 ---
 

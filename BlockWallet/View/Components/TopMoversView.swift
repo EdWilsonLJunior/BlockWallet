@@ -2,8 +2,14 @@ import SwiftUI
 
 struct TopMoversView: View {
     
+    let cryptoCard: [CryptoCardViewModel]
     @Binding var title: String
     @Binding var textButton: String
+    
+    let columns: [GridItem] = [
+        GridItem(.flexible(), spacing: 12),
+        GridItem(.flexible(), spacing: 12),
+    ]
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -21,28 +27,20 @@ struct TopMoversView: View {
                     .padding()
             }
             
-            HStack(spacing: 12) {
-                
-                NavigationLink {
-                    DetailCoin()
-                } label: {
-                    CoinCard(
-                        name: "BTC",
-                        subtitle: "Bitcoin",
-                        change: "+4.5%",
-                        color: .orange
-                    )
-                }
-                
-                NavigationLink {
-                    DetailCoin()
-                } label: {
-                    CoinCard(
-                        name: "ETH",
-                        subtitle: "Ethereum",
-                        change: "+4.5%",
-                        color: .purple
-                    )
+            LazyVGrid(columns: columns, spacing: 16 ) {
+                ForEach(cryptoCard, id: \.id) { coin in
+                    HStack(spacing: 8) {
+                        NavigationLink {
+                            DetailCoin(coinId: coin.id)
+                        } label: {
+                            CoinCard(
+                                symbol: coin.symbol,
+                                name: coin.name,
+                                change: "\(coin.change)",
+                                image: coin.image
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -50,20 +48,30 @@ struct TopMoversView: View {
 }
 
 struct CoinCard: View {
+    let symbol: String
     let name: String
-    let subtitle: String
-    let change: String
-    let color: Color
+    let change: String    
+    let image: String
+    let color: Color?
+    
+    init(symbol: String, name: String, change: String, image: String, color: Color? = nil) {
+        self.symbol = symbol
+        self.name = name
+        self.change = change
+        self.image = image
+        self.color = color
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            
             HStack {
-                Circle()
-                    .fill(color)
-                    .frame(width: 20, height: 20)
+                AsyncImage(url: URL(string: image)) { image in
+                    image.image?.resizable()
+                        .scaledToFill()
+                }
+                .frame(width: 20, height: 20)
                 
-                Text(name)
+                Text(symbol)
                     .foregroundColor(.white)
                     .bold()
                 
@@ -77,7 +85,7 @@ struct CoinCard: View {
                     .cornerRadius(8)
             }
             
-            Text(subtitle)
+            Text(name)
                 .foregroundColor(.gray)
                 .font(.caption)
         }
@@ -92,5 +100,32 @@ struct CoinCard: View {
     @Previewable @State var title: String = "Destaques"
     @Previewable @State var textButton: String = "Ver Todos"
     
-    TopMoversView(title: $title, textButton: $textButton)
+    let cryptoCards = [
+        CryptoCardViewModel(cryptoCoin: CryptoCoinResponse(
+            id: "bitcoin",
+            symbol: "btc",
+            name: "Bitcoin",
+            image: "https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400",
+            currentPrice: 1666.27,
+            priceChangePercentage24h: -0.67301
+        )),
+        CryptoCardViewModel(cryptoCoin: CryptoCoinResponse(
+            id: "ethereum",
+            symbol: "eth",
+            name: "Ethereum",
+            image: "https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628",
+            currentPrice: 1666.27,
+            priceChangePercentage24h: -0.66051
+        )),
+        CryptoCardViewModel(cryptoCoin: CryptoCoinResponse(
+            id: "solana",
+            symbol: "eth",
+            name: "Ethereum",
+            image: "https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628",
+            currentPrice: 1666.27,
+            priceChangePercentage24h: -0.66051
+        ))
+    ]
+    
+    TopMoversView(cryptoCard: cryptoCards, title: $title, textButton: $textButton)
 }

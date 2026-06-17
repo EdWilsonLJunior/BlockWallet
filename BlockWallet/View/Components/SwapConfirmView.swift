@@ -101,7 +101,7 @@ struct SwapConfirmView: View {
             }
         }
         .padding()
-        .background(Color.black.ignoresSafeArea())
+        .background(AppGradient.primary.ignoresSafeArea())
     }
 }
 

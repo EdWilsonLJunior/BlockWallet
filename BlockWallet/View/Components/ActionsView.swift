@@ -1,11 +1,23 @@
 import SwiftUI
 
+
 struct ActionsView: View {
+    @State private var historyFilter: TransactionFilter? = nil
+
     var body: some View {
         HStack(spacing: 40) {
-            ActionItem(icon: "arrow.up", title: "Enviar")
-            ActionItem(icon: "arrow.down", title: "Receber")
-            ActionItem(icon: "arrow.left.arrow.right", title: "Trocar")
+            ActionItem(icon: "arrow.left.arrow.right", title: "Todos") {
+                historyFilter = .all
+            }
+            ActionItem(icon: "arrow.down", title: "Comprado") {
+                historyFilter = .buy
+            }
+            ActionItem(icon: "arrow.up", title: "Vendido") {
+                historyFilter = .sell
+            }
+        }
+        .sheet(item: $historyFilter) { filter in
+            TransactionHistoryView(filter: filter)
         }
     }
 }
@@ -13,22 +25,26 @@ struct ActionsView: View {
 struct ActionItem: View {
     let icon: String
     let title: String
-    
+    var action: () -> Void = {}
+
     var body: some View {
-        VStack(spacing: 8) {
-            ZStack {
-                Circle()
-                    .fill(Color.white.opacity(0.08))
-                    .frame(width: 60, height: 60)
-                
-                Image(systemName: icon)
-                    .foregroundColor(.blue)
+        Button(action: action) {
+            VStack(spacing: 8) {
+                ZStack {
+                    Circle()
+                        .fill(Color.white.opacity(0.08))
+                        .frame(width: 60, height: 60)
+
+                    Image(systemName: icon)
+                        .foregroundColor(.blue)
+                }
+
+                Text(title)
+                    .foregroundColor(.white)
+                    .font(.footnote)
             }
-            
-            Text(title)
-                .foregroundColor(.white)
-                .font(.footnote)
         }
+        .buttonStyle(.plain)
     }
 }
 

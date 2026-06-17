@@ -1,16 +1,11 @@
 import SwiftUI
 
 struct MenuView: View {
-    
-    @State private var email: String = ""
-    @State private var password: String = ""
-    @State private var enableBiometric: Bool = true
-    @State private var goToDashboard: Bool = false
-    @State private var goToRegister: Bool = false
+    @Environment(SessionManager.self) private var session
     
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
+            AppGradient.primary.ignoresSafeArea().ignoresSafeArea()
             
             VStack(spacing: 24) {
                 
@@ -34,15 +29,17 @@ struct MenuView: View {
                         MenuItem(icon: "arrow.up.arrow.down", title: "Swap")
                     }
                     
-                    NavigationLink(destination: AssetsView(coins: mockCoins)) {
-                        MenuItem(icon: "wallet.pass", title: "Assets")
+                    NavigationLink(destination: AssetsView()) {
+                        MenuItem(icon: "wallet.bifold", title: "Assets")
                     }
                 }
                 
                 Divider()
                     .background(Color.gray.opacity(0.4))
-                    NavigationLink(destination: LoginView()) {
-                        MenuItem(icon: "arrow.backward.circle", title: "Log Out", isDestructive: true)
+                Button {
+                    session.logout()
+                } label: {
+                    MenuItem(icon: "arrow.backward.circle", title: "Log Out", isDestructive: true)
                 }
                                     
                 Spacer()
@@ -57,4 +54,5 @@ struct MenuView: View {
 
 #Preview {
     MenuView()
+        .environment(SessionManager())
 }

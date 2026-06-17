@@ -15,15 +15,15 @@ struct BottomBarView: View {
                 Spacer()
                     .frame(width: 40)
                 
-                NavItem(icon: "chart.bar", title: "Market", item: currentView, currentPage: .market) {
+                NavItem(icon: "chart.bar", title: "Loja", item: currentView, currentPage: .market) {
                     MarketView(coins: mockCoins)
                 }
                 
                 Spacer()
                     .frame(width: 80)
                 
-                NavItem(icon: "wallet.pass", title: "Assets", item: currentView, currentPage: .assets) {
-                    AssetsView(coins: mockCoins)
+                NavItem(icon: "wallet.bifold", title: "Carteira", item: currentView, currentPage: .assets) {
+                    AssetsView()
                 }
                 
                 Spacer()
