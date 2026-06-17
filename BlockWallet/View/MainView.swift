@@ -28,7 +28,7 @@ struct MainView: View {
         case .market:
             MarketView()
         case .assets:
-            AssetsView(coins: mockCoins)
+            AssetsView()
         default:
             DashboardView()
         }
@@ -75,7 +75,10 @@ struct MainView: View {
         }
         .navigationBarBackButtonHidden(true)
         .task {
-            await MarketViewModel.shared.load()
+            async let market: () = MarketViewModel.shared.load()
+            async let dashboard: () = DashboardViewModel.shared.loadCryptoCards(limit: 20)
+            async let balance: () = WalletBalanceStore.shared.refresh()
+            _ = await (market, dashboard, balance)
         }
         } // GeometryReader
     }

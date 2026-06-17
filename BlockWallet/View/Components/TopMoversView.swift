@@ -43,7 +43,7 @@ struct TopMoversView: View {
                 ForEach(displayedCoins, id: \.id) { coin in
                     HStack(spacing: 8) {
                         NavigationLink {
-                            DetailCoin()
+                            DetailCoin(coinId: coin.id)
                         } label: {
                             CoinCard(
                                 symbol: coin.symbol,

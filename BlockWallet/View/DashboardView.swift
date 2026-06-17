@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct DashboardView: View {
-    @StateObject private var dashboardViewModel: DashboardViewModel = DashboardViewModel()
+    @StateObject private var dashboardViewModel = DashboardViewModel.shared
     
     @State private var titleMovers: String = "Maiores Movimentações"
     @State private var textButtonMovers: String = "Ver Todos"
@@ -11,7 +11,7 @@ struct DashboardView: View {
     var body: some View {
         
         ZStack {
-            Color.black.ignoresSafeArea()
+            AppGradient.primary.ignoresSafeArea().ignoresSafeArea()
             
             VStack(spacing: 20) {
                 
@@ -20,8 +20,6 @@ struct DashboardView: View {
                 BalanceView()
                 
                 ActionsView()
-                
-                BuyCryptoCard()
                 
                 TopMoversView(
                     cryptoCard: dashboardViewModel.cryptoCard,
@@ -32,13 +30,6 @@ struct DashboardView: View {
             .padding()
         }
         .navigationBarBackButtonHidden(true)
-        .onAppear {
-            Task {
-                async let coins: () = dashboardViewModel.loadCryptoCards(limit: 20)
-                async let balance: () = WalletBalanceStore.shared.refresh()
-                _ = await (coins, balance)
-            }
-        }
     }
 }
 

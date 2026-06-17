@@ -16,14 +16,14 @@ struct BottomBarView: View {
                 Spacer()
                     .frame(width: 40)
 
-                NavItem(icon: "chart.bar", title: "Market", item: .market, currentPage: currentTab) {
+                NavItem(icon: "chart.bar", title: "Loja", item: .market, currentPage: currentTab) {
                     switchTab(.market)
                 }
 
                 Spacer()
                     .frame(width: 80)
 
-                NavItem(icon: "wallet.pass", title: "Assets", item: .assets, currentPage: currentTab) {
+                NavItem(icon: "wallet.pass", title: "Carteira", item: .assets, currentPage: currentTab) {
                     switchTab(.assets)
                 }
 

@@ -3,17 +3,18 @@ internal import Combine
 
 @MainActor
 class DashboardViewModel: ObservableObject {
-    
+    static let shared = DashboardViewModel()
+
     @Published var cryptoCard: [CryptoCardViewModel] = []
     @Published var errorMessage: String?
     
     private let repository: CryptoCoinRepositoryProtocol = CryptoCoinRepository()
     
-    func loadCryptoCards(limit: Int) async -> Void {
+    func loadCryptoCards(limit: Int) async {
+        guard cryptoCard.isEmpty else { return }
         do {
             let coins = try await repository.getCoins(limit: limit)
             cryptoCard = coins.map(CryptoCardViewModel.init)
-            print(coins)
         } catch {
             errorMessage = error.localizedDescription
         }

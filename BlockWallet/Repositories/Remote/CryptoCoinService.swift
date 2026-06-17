@@ -23,7 +23,22 @@ class CryptoCoinService {
     private let coinGeckoService = CoinGeckoService.shared
     
     func getCoins(limit: Int) async throws -> [CryptoCoinResponse] {
-        try await coinGeckoService.fetchMarkets(perPage: limit, vsCurrency: "usd")
+        try await coinGeckoService.fetchMarkets(perPage: limit, vsCurrency: "brl")
+    }
+
+    func getCoinDetail(id: String) async throws -> CryptoCoinDetailResponse {
+        try await coinGeckoService.fetchCryptoCoinDetail(id: id)
+    }
+
+    func fetchChart(id: String) async throws -> [ChartDataPoint] {
+        let chartResponse = try await coinGeckoService.fetchMarketChart(id: id)
+        return chartResponse.prices.compactMap { pair -> ChartDataPoint? in
+            guard pair.count >= 2 else { return nil }
+            return ChartDataPoint(
+                timestamp: Date(timeIntervalSince1970: pair[0] / 1000),
+                price: pair[1]
+            )
+        }
     }
 
     func getDashboardBalance(accessToken: String) async throws -> Double {

@@ -76,11 +76,7 @@ struct SuccessModalView: View {
                 }
                 .padding()
                 .background(
-                    LinearGradient(
-                        colors: [Color(white: 0.1), Color.black],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
+                    AppGradient.primary.ignoresSafeArea()
                 )
                 .cornerRadius(20)
                 .padding(.horizontal, 30)

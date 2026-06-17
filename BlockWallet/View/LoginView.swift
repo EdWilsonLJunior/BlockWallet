@@ -47,8 +47,6 @@ struct LoginView: View {
                         text: $password
                     )
                     
-                    BiometricToggleCard(isEnabled: $enableBiometric)
-                    
                     Spacer()
                     
                     PrimaryButton(title: isLoading ? "Entrando..." : "Entrar") {
@@ -90,7 +88,7 @@ struct LoginView: View {
                 }
             }
             .padding()
-            .background(Color.black.ignoresSafeArea())
+            .background(AppGradient.primary.ignoresSafeArea())
         }
         .navigationBarBackButtonHidden(true)
     }

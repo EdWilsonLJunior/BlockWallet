@@ -25,7 +25,7 @@ struct MarketView: View {
                 .padding(.horizontal)
             }
         }
-        .background(Color.black.ignoresSafeArea())
+        .background(AppGradient.primary.ignoresSafeArea().ignoresSafeArea())
         .onAppear {
             guard viewModel.cryptoCard.isEmpty else { return }
             Task { await viewModel.load() }

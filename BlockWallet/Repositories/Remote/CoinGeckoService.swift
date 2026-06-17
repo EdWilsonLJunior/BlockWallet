@@ -107,6 +107,19 @@ final class CoinGeckoService {
         return response
     }
 
+    func fetchCryptoCoinDetail(id: String) async throws -> CryptoCoinDetailResponse {
+        let endpoint = CacheEndpoint.coinDetail(id: id)
+
+        let response: ResponseData<CryptoCoinDetailResponse> = try await cacheManager.fetch(
+            endpoint: endpoint,
+            decode: ResponseData<CryptoCoinDetailResponse>.self
+        ) {
+            try await self.httpClient.requestData(path: endpoint.path)
+        }
+
+        return response.data
+    }
+
     func searchCoins(query: String) async throws -> SearchCoinsResponse {
         let endpoint = CacheEndpoint.search(query: query)
         let queryItems = [URLQueryItem(name: "q", value: query)]

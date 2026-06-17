@@ -85,7 +85,7 @@ struct SwapView: View {
                 
             }
             .padding()
-            .background(Color.black.ignoresSafeArea())
+            .background(AppGradient.primary.ignoresSafeArea().ignoresSafeArea())
             .sheet(isPresented: $showCoinSelector) {
                                     SelectTokenView(coins: viewModel.coins) { selected in
                                         Task {

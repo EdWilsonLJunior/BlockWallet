@@ -8,19 +8,15 @@ struct MenuView: View {
 
     var body: some View {
         ZStack {
-            Color(white: 0.08).ignoresSafeArea()
-
-            VStack(alignment: .leading, spacing: 24) {
-
-                HStack {
-                    Spacer()
-                    Button(action: onClose) {
-                        Image(systemName: "xmark")
-                            .foregroundColor(.gray)
-                            .padding(8)
-                    }
-                }
-
+            AppGradient.primary.ignoresSafeArea().ignoresSafeArea()
+            
+            VStack(spacing: 24) {
+                
+                Text("Menu")
+                    .font(.title2)
+                    .bold()
+                    .foregroundColor(.white)
+                
                 WalletHeaderView()
 
                 VStack(alignment: .leading, spacing: 4) {
@@ -33,8 +29,9 @@ struct MenuView: View {
                     NavigationLink(destination: SwapView()) {
                         MenuItem(icon: "arrow.up.arrow.down", title: "Swap")
                     }
-                    Button { switchTab(.assets) } label: {
-                        MenuItem(icon: "wallet.pass", title: "Assets")
+                    
+                    NavigationLink(destination: AssetsView()) {
+                        MenuItem(icon: "wallet.bifold", title: "Assets")
                     }
                 }
 
