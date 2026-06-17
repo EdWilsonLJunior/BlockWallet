@@ -124,7 +124,10 @@ https://blockwallet-api.onrender.com
 | Método | Endpoint               | Descrição           |
 |--------|------------------------|---------------------|
 | `POST` | `/api/v1/auth/sign-up` | Cadastro de usuário |
-| `POST` | `/api/v1/auth/sign-in` | Login de usuário    |
+| `POST` | `/api/v1/auth/sign-in` | Login com credencias|
+| `POST` | `/api/v1/auth/me`      | Dados do usuário    |
+| `POST` | `/api/v1/auth/sign-out`| Encerrar sessão     |
+| `GET`  | `/profile`             | Retornar Perfil     |
 
 ---
 
