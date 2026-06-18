@@ -2,12 +2,24 @@ import SwiftUI
 
 struct SwapView: View {
 
-    @StateObject private var viewModel = SwapViewModel()
+    var initialCoinId: String? = nil
+    @StateObject private var viewModel: SwapViewModel
     @State private var showCoinSelector = false
+
+    init(initialCoinId: String? = nil) {
+        self.initialCoinId = initialCoinId
+        _viewModel = StateObject(wrappedValue: SwapViewModel(initialCoinId: initialCoinId))
+    }
 
     var body: some View {
         VStack(spacing: 24) {
-                
+
+                // Handle
+                RoundedRectangle(cornerRadius: 3)
+                    .fill(Color.white.opacity(0.3))
+                    .frame(width: 40, height: 5)
+                    .padding(.top, 8)
+
                 // Header
                 Text("Swap")
                     .foregroundColor(.white)
@@ -19,6 +31,16 @@ struct SwapView: View {
                     }
                 }
                 .pickerStyle(.segmented)
+                .onAppear {
+                    UISegmentedControl.appearance().setTitleTextAttributes(
+                        [.foregroundColor: UIColor.white],
+                        for: .normal
+                    )
+                    UISegmentedControl.appearance().setTitleTextAttributes(
+                        [.foregroundColor: UIColor.black],
+                        for: .selected
+                    )
+                }
                 
                 Spacer().frame(height: 10)
                 
@@ -52,7 +74,7 @@ struct SwapView: View {
                     
                     AmountField(
                                             value: .constant(viewModel.totalEstimateText),
-                                            coin: "USD",
+                                            coin: "BRL",
                         icon: "circle.hexagongrid.fill"
                     ) {
                                             // not selectable

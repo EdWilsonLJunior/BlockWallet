@@ -30,6 +30,24 @@ class CryptoCoinService {
         try await coinGeckoService.fetchCryptoCoinDetail(id: id)
     }
 
+    func getWalletHoldings(accessToken: String) async throws -> [WalletHoldingResponse] {
+        guard let url = URL(string: "\(Constants.API_URL)/api/v1/wallet") else {
+            throw NetworkError.invalidURL
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let http = response as? HTTPURLResponse else { throw NetworkError.invalidResponse }
+        if http.statusCode == 401 { throw NetworkError.unauthorized }
+        guard (200...299).contains(http.statusCode) else { throw NetworkError.invalidData }
+
+        print("[Wallet] raw: \(String(data: data, encoding: .utf8) ?? "")")
+        let decoded = try JSONDecoder().decode(ResponseData<[WalletHoldingResponse]>.self, from: data)
+        return decoded.data
+    }
+
     func fetchChart(id: String) async throws -> [ChartDataPoint] {
         let chartResponse = try await coinGeckoService.fetchMarketChart(id: id)
         return chartResponse.prices.compactMap { pair -> ChartDataPoint? in

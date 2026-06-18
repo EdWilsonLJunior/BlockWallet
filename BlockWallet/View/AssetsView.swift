@@ -1,33 +1,19 @@
 import SwiftUI
 
-// MARK: - Wallet Holding Model
-
-private struct WalletHolding: Identifiable {
-    let id: String
-    let coinName: String
-    let coinSymbol: String
-    let amount: Double
-    let currentPrice: Double
-    let priceChange24h: Double
-    let image: String
-
-    var totalValue: Double { amount * currentPrice }
-}
-
 // MARK: - Wallet Asset Row
 
 private struct WalletAssetRow: View {
 
-    let holding: WalletHolding
+    let holding: WalletHoldingResponse
 
     private var coinIcon: some View {
-        AsyncImage(url: URL(string: holding.image)) { phase in
+        AsyncImage(url: URL(string: holding.imageUrl ?? "")) { phase in
             if let img = phase.image {
                 img.resizable().scaledToFill()
             } else {
                 ZStack {
                     Circle().fill(Color.gray.opacity(0.3))
-                    Text(holding.coinSymbol.prefix(2).uppercased())
+                    Text((holding.cryptoSymbol ?? holding.cryptoId).prefix(2).uppercased())
                         .foregroundColor(.white)
                         .font(.caption2).bold()
                 }
@@ -37,15 +23,19 @@ private struct WalletAssetRow: View {
         .clipShape(Circle())
     }
 
+    private var symbol: String {
+        (holding.cryptoSymbol ?? holding.cryptoId).uppercased()
+    }
+
     var body: some View {
         HStack(spacing: 14) {
             coinIcon
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(holding.coinSymbol.uppercased())
+                Text(symbol)
                     .foregroundColor(.white)
                     .font(.subheadline).bold()
-                Text(String(format: "%.4f %@", holding.amount, holding.coinSymbol.uppercased()))
+                Text(String(format: "%.6g %@", holding.totalQuantity, symbol))
                     .foregroundColor(.gray)
                     .font(.caption)
             }
@@ -53,17 +43,25 @@ private struct WalletAssetRow: View {
             Spacer()
 
             VStack(alignment: .trailing, spacing: 4) {
-                Text(holding.totalValue, format: .currency(code: "BRL"))
-                    .foregroundColor(.white)
-                    .font(.subheadline).bold()
+                if let value = holding.currentValueUsd {
+                    Text(String(format: "R$ %.2f", value))
+                        .foregroundColor(.white)
+                        .font(.subheadline).bold()
+                } else if let invested = holding.totalInvestedUsd {
+                    Text(String(format: "R$ %.2f", invested))
+                        .foregroundColor(.white)
+                        .font(.subheadline).bold()
+                } else {
+                    Text("--")
+                        .foregroundColor(.gray)
+                        .font(.subheadline)
+                }
 
-                HStack(spacing: 4) {
-                    Image(systemName: holding.priceChange24h >= 0 ? "arrow.up.right" : "arrow.down.right")
-                        .font(.caption2)
-                    Text(String(format: "%.2f%%", abs(holding.priceChange24h)))
+                if let avg = holding.averageBuyPrice {
+                    Text(String(format: "Preço médio: R$ %.2f", avg))
+                        .foregroundColor(.gray)
                         .font(.caption)
                 }
-                .foregroundColor(holding.priceChange24h >= 0 ? .green : .red)
             }
         }
         .padding()
@@ -76,63 +74,18 @@ private struct WalletAssetRow: View {
 
 struct AssetsView: View {
 
-    // Mock de preços atuais (substituir por dados da API em produção)
-    private let mockPriceMap: [String: (price: Double, change: Double, image: String)] = [
-        "btc": (300_000, -0.66, "https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400"),
-        "eth": (15_000,  1.23,  "https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628"),
-        "sol": (800,     2.45,  "https://coin-images.coingecko.com/coins/images/4128/large/solana.png?1696504756"),
-        "bnb": (600,     0.85,  "https://coin-images.coingecko.com/coins/images/825/large/bnb-icon2_2x.png?1696501970"),
-        "xrp": (3.2,    -1.10, "https://coin-images.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png?1696501442"),
-        "matic": (0.85,  3.20,  "https://coin-images.coingecko.com/coins/images/4713/large/polygon.png?1698233745")
-    ]
-
-    private var holdings: [WalletHolding] {
-        var map: [String: (name: String, symbol: String, amount: Double)] = [:]
-        for tx in Transaction.mockData {
-            let key = tx.coinSymbol.lowercased()
-            var entry = map[key] ?? (tx.coinName, tx.coinSymbol, 0.0)
-            entry.amount += tx.type == .buy ? tx.amount : -tx.amount
-            map[key] = entry
-        }
-        return map.values
-            .filter { $0.amount > 0 }
-            .map { entry in
-                let price = mockPriceMap[entry.symbol.lowercased()]
-                return WalletHolding(
-                    id: entry.symbol,
-                    coinName: entry.name,
-                    coinSymbol: entry.symbol,
-                    amount: entry.amount,
-                    currentPrice: price?.price ?? 0,
-                    priceChange24h: price?.change ?? 0,
-                    image: price?.image ?? ""
-                )
-            }
-            .sorted { $0.totalValue > $1.totalValue }
-    }
-
-    private var totalBalance: Double {
-        holdings.reduce(0) { $0 + $1.totalValue }
-    }
-
-    private var totalChange: Double {
-        guard !holdings.isEmpty else { return 0 }
-        let weightedChange = holdings.reduce(0.0) { acc, h in
-            acc + (h.totalValue / totalBalance) * h.priceChange24h
-        }
-        return weightedChange
-    }
+    @StateObject private var viewModel = AssetsViewModel.shared
 
     var body: some View {
         ZStack {
             AppGradient.primary.ignoresSafeArea()
 
             VStack(spacing: 20) {
-                
+
                 HeaderView()
-                
+
                 BalanceView()
-                
+
                 ActionsView()
 
                 // Lista de Ativos
@@ -142,12 +95,36 @@ struct AssetsView: View {
                             .foregroundColor(.white)
                             .font(.headline)
                         Spacer()
-                        Text("\(holdings.count) moeda\(holdings.count == 1 ? "" : "s")")
-                            .foregroundColor(.gray)
-                            .font(.caption)
+                        if !viewModel.holdings.isEmpty {
+                            Text("\(viewModel.holdings.count) moeda\(viewModel.holdings.count == 1 ? "" : "s")")
+                                .foregroundColor(.gray)
+                                .font(.caption)
+                        }
+                        Button {
+                            Task { await viewModel.load(force: true) }
+                        } label: {
+                            Image(systemName: "arrow.clockwise")
+                                .foregroundColor(.gray)
+                                .font(.caption)
+                        }
                     }
 
-                    if holdings.isEmpty {
+                    if viewModel.isLoading {
+                        HStack { Spacer(); ProgressView().tint(.white); Spacer() }
+                            .padding(.vertical, 40)
+                    } else if let error = viewModel.errorMessage {
+                        VStack(spacing: 8) {
+                            Image(systemName: "exclamationmark.triangle")
+                                .foregroundColor(.red)
+                                .font(.title2)
+                            Text(error)
+                                .foregroundColor(.gray)
+                                .font(.caption)
+                                .multilineTextAlignment(.center)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 30)
+                    } else if viewModel.holdings.isEmpty {
                         VStack(spacing: 12) {
                             Image(systemName: "wallet.bifold")
                                 .font(.largeTitle)
@@ -161,7 +138,7 @@ struct AssetsView: View {
                     } else {
                         ScrollView {
                             VStack(spacing: 12) {
-                                ForEach(holdings) { holding in
+                                ForEach(viewModel.holdings, id: \.cryptoId) { holding in
                                     WalletAssetRow(holding: holding)
                                 }
                             }
@@ -170,14 +147,15 @@ struct AssetsView: View {
                 }
 
                 Spacer()
-
             }
             .padding()
         }
         .navigationBarBackButtonHidden(true)
+        .task { await viewModel.load() }
     }
 }
 
 #Preview {
     AssetsView()
 }
+

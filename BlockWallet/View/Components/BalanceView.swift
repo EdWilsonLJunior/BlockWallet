@@ -18,7 +18,7 @@ struct BalanceView: View {
                     .fill(Color.blue.opacity(0.2))
                     .frame(width: 70, height: 70)
 
-                Text(store.currencySymbol)
+                Text("R$")
                     .font(.largeTitle)
                     .foregroundColor(.blue)
             }
@@ -27,21 +27,6 @@ struct BalanceView: View {
                 .font(.system(size: 34, weight: .bold))
                 .foregroundColor(.white)
                 .redacted(reason: store.isLoading ? .placeholder : [])
-
-            Button {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    store.showBRL.toggle()
-                }
-            } label: {
-                Text(store.showBRL ? "Ver em USD" : "Ver em BRL")
-                    .font(.caption)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 4)
-                    .background(Color.blue.opacity(0.2))
-                    .foregroundColor(.blue)
-                    .cornerRadius(10)
-            }
-            .disabled(store.usdToBrl == nil)
         }
     }
 }

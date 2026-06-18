@@ -36,6 +36,7 @@ final class SwapViewModel: ObservableObject {
     private let walletBalanceStore: WalletBalanceStore
 
     init(
+        initialCoinId: String? = nil,
         repository: CryptoCoinRepositoryProtocol = CryptoCoinRepository(),
         coinService: CryptoCoinService = .shared,
         userService: UserService = UserService(),
@@ -45,7 +46,10 @@ final class SwapViewModel: ObservableObject {
         self.coinService = coinService
         self.userService = userService
         self.walletBalanceStore = walletBalanceStore
+        self.initialCoinId = initialCoinId
     }
+
+    private let initialCoinId: String?
 
     var actionButtonTitle: String {
         if isBuying {
@@ -69,14 +73,14 @@ final class SwapViewModel: ObservableObject {
         guard let quantity = parsedQuantity, let price = currentPrice else {
             return "--"
         }
-        return String(format: "$ %.2f", quantity * price)
+        return String(format: "R$ %.2f", quantity * price)
     }
 
     var rateText: String {
         guard let symbol = selectedCoin?.symbol.uppercased(), let price = currentPrice else {
             return "Cotação indisponível"
         }
-        return String(format: "1 %@ ≈ $ %.2f", symbol, price)
+        return String(format: "1 %@ ≈ R$ %.2f", symbol, price)
     }
 
     func loadInitialData() async {
@@ -89,7 +93,12 @@ final class SwapViewModel: ObservableObject {
             coins = mappedCoins
 
             if selectedCoin == nil {
-                selectedCoin = mappedCoins.first
+                if let initialId = initialCoinId,
+                   let match = mappedCoins.first(where: { $0.id == initialId }) {
+                    selectedCoin = match
+                } else {
+                    selectedCoin = mappedCoins.first
+                }
             }
 
             await refreshPrice()

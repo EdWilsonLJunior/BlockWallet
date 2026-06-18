@@ -22,17 +22,31 @@ class DetailCoinViewModel: ObservableObject {
     func loadCoinDetail(id: String) async -> Void {
         isLoading = true
         errorMessage = ""
+        print("[DetailCoin] Iniciando carregamento para id: \(id)")
         
         do {
+            print("[DetailCoin] Buscando detalhes da moeda...")
             let coinDetail = try await cryptoCoinRepository.getCoinDetail(id: id)
-            let points = try await cryptoCoinRepository.getChart(id: id)
-            
-            chartPoints = points
+            print("[DetailCoin] Detalhes recebidos: \(coinDetail.name) (\(coinDetail.symbol))")
+            print("[DetailCoin] currentPrice keys: \(coinDetail.marketData.currentPrice.keys.sorted())")
             detailCoinViewModel = CoinViewModel(cryptoCoinDetail: coinDetail)
         } catch {
+            print("[DetailCoin] ERRO ao buscar detalhes: \(error)")
             errorMessage = error.localizedDescription
-            
+            isLoading = false
+            return
         }
+
+        // Gráfico é opcional — falha silenciosa
+        do {
+            print("[DetailCoin] Buscando gráfico...")
+            let points = try await cryptoCoinRepository.getChart(id: id)
+            print("[DetailCoin] Pontos do gráfico: \(points.count)")
+            chartPoints = points
+        } catch {
+            print("[DetailCoin] Gráfico indisponível: \(error)")
+        }
+
         isLoading = false
     }
 }

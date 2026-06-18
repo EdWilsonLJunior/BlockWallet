@@ -4,6 +4,7 @@ struct DetailCoin: View {
     let coinId: String
     
     @StateObject private var viewModel: DetailCoinViewModel = DetailCoinViewModel()
+    @State private var showBuySheet = false
     
     var body: some View {
         ZStack {
@@ -141,7 +142,7 @@ struct DetailCoin: View {
                     
                     // MARK: BUTTON
                     PrimaryButton(title: "Comprar") {
-                        print("Comprar\(viewModel.detailCoinViewModel?.symbol ?? "")")
+                        showBuySheet = true
                     }
                 }
                 .padding()
@@ -186,6 +187,9 @@ struct DetailCoin: View {
             }
         }
         .background(AppGradient.primary.ignoresSafeArea().ignoresSafeArea())
+        .sheet(isPresented: $showBuySheet) {
+            SwapView(initialCoinId: coinId)
+        }
         .task {
             await viewModel.loadCoinDetail(id: coinId)
         }
